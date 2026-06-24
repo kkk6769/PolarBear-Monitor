@@ -120,7 +120,6 @@ make agent-linux-arm64
 make agent-windows-amd64
 make dashboard-linux-amd64
 make dashboard-linux-arm64
-```
 
 产物输出至 `Run Folder (Build in there)/`，按平台分目录。
 
