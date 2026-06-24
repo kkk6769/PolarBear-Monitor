@@ -52,7 +52,7 @@ go run ./agent/cmd/agent/ -c agent.yaml
 ### Dashboard
 
 ```bash
-curl -sS -O https://home.polarbear.wtf/files/install.sh && chmod +x install.sh && sudo ./install.sh
+curl -sS -O https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/install.sh && chmod +x install.sh && sudo ./install.sh
 ```
 
 交互式菜单：安装 Dashboard / Agent、更新 Dashboard（保留数据）、改端口、开关自启、卸载。
@@ -61,10 +61,10 @@ curl -sS -O https://home.polarbear.wtf/files/install.sh && chmod +x install.sh &
 
 ```bash
 # Linux
-curl -fsSL https://home.polarbear.wtf/files/install-agent.sh | bash -s -- IP:PORT
+curl -fsSL https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/install-agent.sh | bash -s -- IP:PORT
 
 # Windows PowerShell（以管理员身份运行）
-irm https://home.polarbear.wtf/files/install-agent.ps1 | iex
+irm https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Windows%20Part/install-agent.ps1 | iex
 Install-Agent -Server IP:PORT
 ```
 

@@ -9,8 +9,8 @@ SERVER_ADDR="${1:-}"
 # detect architecture
 ARCH=$(uname -m)
 case "$ARCH" in
-    aarch64|arm64) DOWNLOAD_URL="https://home.polarbear.wtf/files/polarbear-agent-arm64" ;;
-    *)            DOWNLOAD_URL="https://home.polarbear.wtf/files/polarbear-agent" ;;
+    aarch64|arm64) DOWNLOAD_URL="https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/agent/polarbear-agent-arm64" ;;
+    *)            DOWNLOAD_URL="https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/agent/polarbear-agent" ;;
 esac
 echo "架构: $ARCH"
 INSTALL_DIR="/opt/polarbear-agent"

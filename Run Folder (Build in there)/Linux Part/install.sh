@@ -8,10 +8,10 @@ DASHBOARD_PORT=8000
 GRPC_PORT=8090
 INSTALL_DIR="/opt/polarbear"
 AGENT_DIR="/opt/polarbear-agent"
-DOWNLOAD_DASHBOARD="https://home.polarbear.wtf/files/polarbear-dashboard"
-DOWNLOAD_DASHBOARD_ARM="https://home.polarbear.wtf/files/polarbear-dashboard-arm64"
-DOWNLOAD_AGENT="https://home.polarbear.wtf/files/polarbear-agent"
-DOWNLOAD_AGENT_ARM="https://home.polarbear.wtf/files/polarbear-agent-arm64"
+DOWNLOAD_DASHBOARD="https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/dashboard/polarbear-dashboard"
+DOWNLOAD_DASHBOARD_ARM="https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/dashboard/polarbear-dashboard-arm64"
+DOWNLOAD_AGENT="https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/agent/polarbear-agent"
+DOWNLOAD_AGENT_ARM="https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/agent/polarbear-agent-arm64"
 GREEN='\033[32m'; YELLOW='\033[33m'; RED='\033[31m'; BOLD='\033[1m'; NC='\033[0m'
 
 download() {
@@ -163,8 +163,8 @@ EOF
     fi
     echo -e "${GREEN}╠══════════════════════════════════════════╣${NC}"
     echo -e "${GREEN}║  Agent 一键安装:${NC}"
-    echo -e "${GREEN}║  Linux: curl -fsSL https://home.polarbear.wtf/files/install-agent.sh | bash -s -- $ip:$GRPC_PORT${NC}"
-    echo -e "${GREEN}║  Win PS: irm https://home.polarbear.wtf/files/install-agent.ps1 | iex${NC}"
+    echo -e "${GREEN}║  Linux: curl -fsSL https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Linux%20Part/install-agent.sh | bash -s -- $ip:$GRPC_PORT${NC}"
+    echo -e "${GREEN}║  Win PS: irm https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Windows%20Part/install-agent.ps1 | iex${NC}"
     echo -e "${GREEN}║           Install-Agent -Server $ip:$GRPC_PORT${NC}"
     echo -e "${GREEN}╚══════════════════════════════════════════╝${NC}"
     pause

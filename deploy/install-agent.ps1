@@ -1,6 +1,6 @@
 # ============================================================
 # PolarBear Agent — Windows 一键安装
-# 用法: irm https://home.polarbear.wtf/files/install-agent.ps1 | iex
+# 用法: irm https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Windows%20Part/install-agent.ps1 | iex
 #       Install-Agent -Server 192.168.1.5:8090
 # ============================================================
 
@@ -11,7 +11,7 @@ function Install-Agent {
     )
 
     $InstallDir = "C:\PolarBear Monitor"
-    $DownloadUrl = "https://home.polarbear.wtf/files/polarbear-agent.exe"
+    $DownloadUrl = "https://raw.githubusercontent.com/kkk6769/PolarBear-Monitor/main/Run%20Folder%20(Build%20in%20there)/Windows%20Part/agent/polarbear-agent.exe"
     $AgentExe = "$InstallDir\polarbear-agent.exe"
     $AgentYaml = "$InstallDir\agent.yaml"
     $VbsFile = "$InstallDir\polarbear-agent.vbs"
