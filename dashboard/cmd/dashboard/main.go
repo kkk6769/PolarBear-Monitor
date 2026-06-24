@@ -307,11 +307,11 @@ func friendlyName(h *model.Host) string {
 func (s *monitorServer) ReportSystemState(stream pb.MonitorService_ReportSystemStateServer) error {
 	uuid := extractUUID(stream.Context())
 
-	// 先确定该 stream 对应的 serverID
+	// 查找该 UUID 对应的 serverID（不检查 Online 标志——流到达本身就证明 Agent 在线）
 	serversMu.RLock()
 	var serverID uint64
 	for _, svr := range servers {
-		if svr.UUID == uuid && svr.Online {
+		if svr.UUID == uuid {
 			serverID = svr.ID
 			break
 		}
@@ -319,13 +319,18 @@ func (s *monitorServer) ReportSystemState(stream pb.MonitorService_ReportSystemS
 	serversMu.RUnlock()
 
 	if serverID == 0 {
-		log.Printf("[agent] stream for unknown uuid=%s, discarding", uuid)
-		for {
-			if _, err := stream.Recv(); err != nil {
-				return err
-			}
-		}
+		// 真正未知的 UUID：立即关闭流，迫使 Agent 重新 ReportSystemInfo 注册
+		log.Printf("[agent] stream for unknown uuid=%s, rejecting to trigger reconnect", uuid)
+		return stream.SendAndClose(&pb.Receipt{Ok: false})
 	}
+
+	// 流启动时恢复 Online 标记（Agent 已明确在线）
+	serversMu.Lock()
+	if svr, ok := servers[serverID]; ok {
+		svr.Online = true
+		db.Model(svr).Update("online", true)
+	}
+	serversMu.Unlock()
 
 	for {
 		state, err := stream.Recv()
@@ -348,6 +353,8 @@ func (s *monitorServer) ReportSystemState(stream pb.MonitorService_ReportSystemS
 			stateJSON, _ := json.Marshal(inner)
 			svr.State = string(stateJSON)
 			svr.LastActive = time.Now()
+			// 每次成功接收数据都确保 Online=true，防御旧流关闭覆盖 Online 的竞态
+			svr.Online = true
 		}
 		serversMu.Unlock()
 		broadcastServers()

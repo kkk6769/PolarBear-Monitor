@@ -12,7 +12,11 @@
 - `Run Folder (Build in there)/` 纳入版本控制，方便直接下载预编译二进制
 
 ### 修复
-- 
+- 修复 Agent 上报正常但 Dashboard 显示离线的 Bug（双流竞态 + 丢弃模式导致永久离线）
+  - `ReportSystemState` UUID 查找不再要求 `Online=true`
+  - 每次成功接收数据时恢复 `Online=true`，防御旧流关闭覆盖
+  - 未知 UUID 的流立即`SendAndClose` 拒绝，迫使 Agent 重新注册而非静默丢弃
+
 
 ### 变更
 - 所有部署脚本下载地址从源地址 迁移至 GitHub Raw
