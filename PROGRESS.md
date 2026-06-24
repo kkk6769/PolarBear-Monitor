@@ -79,10 +79,15 @@
 
 ---
 
-## 二、本次会话已修复
+## 二、本次会话已完成
 
-| 问题 | 修复 |
+| 任务 | 详情 |
 |------|------|
+| GitHub 仓库初始化 | 创建仓库 https://github.com/kkk6769/PolarBear-Monitor，26 个源文件初始提交 |
+| .gitignore | 排除编译产物（/*.exe）、运行时数据（data/）、IDE 配置 |
+| 下载链接迁移 | 全部 7 个文件 23 处链接从 home.polarbear.wtf → GitHub Raw |
+| Run Folder 纳入版本控制 | 预编译二进制随仓库分发，用户可直接下载使用 |
+| 文档同步更新 | README / CHANGELOG / PROGRESS 反映最新变更 |
 
 ---
 

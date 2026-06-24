@@ -1,5 +1,7 @@
 # 🐻‍❄️ PolarBear Monitor
 
+[![GitHub](https://img.shields.io/badge/GitHub-kkk6769%2FPolarBear--Monitor-blue?logo=github)](https://github.com/kkk6769/PolarBear-Monitor)
+
 精简单向服务器监控系统。**Agent 只上报，Dashboard 只接收**——不对探针下发任何命令、不执行远程任务。
 
 ## 架构
@@ -93,11 +95,24 @@ debug: false                  # 调试模式
 
 ---
 
+## 源码
+
+```bash
+git clone https://github.com/kkk6769/PolarBear-Monitor.git
+cd PolarBear-Monitor
+```
+
 ## 编译
 
 ```bash
 # 全部平台
 make build-all
+
+# 或单独编译
+make agent-linux-amd64    # Linux Agent
+make agent-windows-amd64  # Windows Agent
+make dashboard-linux-amd64 # Linux Dashboard
+```
 
 # 单个目标
 make agent-linux-amd64
