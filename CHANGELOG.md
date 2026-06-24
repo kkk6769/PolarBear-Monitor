@@ -16,7 +16,7 @@
   - `ReportSystemState` UUID 查找不再要求 `Online=true`
   - 每次成功接收数据时恢复 `Online=true`，防御旧流关闭覆盖
   - 未知 UUID 的流立即`SendAndClose` 拒绝，迫使 Agent 重新注册而非静默丢弃
-
+- 修复管理后台保存等待过久（~3s → ~0.1s）：PATCH 请求从串行改为 `Promise.all()` 并发 + 仅发送变更项
 
 ### 变更
 - 所有部署脚本下载地址从源地址 迁移至 GitHub Raw

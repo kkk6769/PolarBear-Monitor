@@ -147,13 +147,13 @@ function render() {
   tbody.innerHTML = servers.map((s, i) => `
     <tr>
       <td style="width:80px">
-        <input type="number" value="${s.display_index}" min="0" style="width:60px" onchange="servers[${i}].display_index=parseInt(this.value)||0">
+        <input type="number" value="${s.display_index}" min="0" style="width:60px" onchange="servers[${i}].display_index=parseInt(this.value)||0;servers[${i}]._dirty=true">
       </td>
       <td>
-        <input type="text" value="${esc(s.name)}" onchange="servers[${i}].name=this.value">
+        <input type="text" value="${esc(s.name)}" onchange="servers[${i}].name=this.value;servers[${i}]._dirty=true">
       </td>
       <td>
-        <input type="text" value="${esc(s.note||'')}" placeholder="请勿输入敏感隐私数据" onchange="servers[${i}].note=this.value" style="color:${s.note?'var(--text)':'var(--text-dim)'}">
+        <input type="text" value="${esc(s.note||'')}" placeholder="请勿输入敏感隐私数据" onchange="servers[${i}].note=this.value;servers[${i}]._dirty=true" style="color:${s.note?'var(--text)':'var(--text-dim)'}">
       </td>
       <td style="font-size:12px;color:var(--text-dim)">
         ${s.host ? esc(s.host.platform+' '+s.host.platform_version) : '--'}
@@ -173,15 +173,30 @@ function render() {
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 async function saveAll() {
-  const order = servers.map((s,i) => ({id:s.id, display_index:parseInt(s.display_index)||i}));
-  const names = servers.map(s => ({id:s.id, name:s.name, note:s.note||''}));
+  // 仅收集实际改动的服务器
+  const patches = servers.filter(s => s._dirty).map(s => ({
+    id: s.id,
+    name: s.name,
+    note: s.note || '',
+    display_index: parseInt(s.display_index) || 0,
+  }));
+  if (patches.length === 0) {
+    showMsg('ok', '没有需要保存的变更');
+    return;
+  }
   try {
-    await fetch('/api/v1/reorder', {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
-    for (const n of names) {
-      await fetch('/api/v1/server/'+n.id, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n.name, note:n.note})});
-    }
-    showMsg('ok', '保存成功！');
-  } catch(e) {
+    // 并发发送所有 PATCH（reorder 由每个 PATCH 的 display_index 覆盖，无需单独请求）
+    await Promise.all(patches.map(p =>
+      fetch('/api/v1/server/' + p.id, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: p.name, note: p.note, display_index: p.display_index })
+      })
+    ));
+    // 清除 dirty 标记
+    servers.forEach(s => delete s._dirty);
+    showMsg('ok', `保存成功！(${patches.length} 台)`);
+  } catch (e) {
     showMsg('err', '保存失败: ' + e.message);
   }
 }
