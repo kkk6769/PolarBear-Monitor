@@ -3,15 +3,8 @@
 # ===========================================
 
 # ---------- 编译产物 ----------
-*.exe
-*.exe~
-polarbear-agent
-polarbear-agent-arm64
-polarbear-dashboard
-polarbear-dashboard-arm64
-
-# Run Folder (编译输出目录)
-Run Folder (Build in there)/
+/*.exe
+/*.exe~
 
 # ---------- 运行时数据 ----------
 data/
