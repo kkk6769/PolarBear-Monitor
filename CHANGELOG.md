@@ -4,7 +4,7 @@
 
 ---
 
-## [Unreleased]
+## [Version---1.6]
 
 ### 新增
 - 添加 `.gitignore`，排除编译产物、运行时数据和 IDE 配置文件
@@ -15,7 +15,7 @@
 - 
 
 ### 变更
-- 所有部署脚本下载地址从 `home.polarbear.wtf` 迁移至 GitHub Raw
+- 所有部署脚本下载地址从源地址 迁移至 GitHub Raw
 - README 中的一键部署命令同步更新为新地址
 
 ### 移除
