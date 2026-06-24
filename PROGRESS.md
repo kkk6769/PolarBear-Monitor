@@ -79,27 +79,13 @@
 
 ---
 
-## 二、本次会话已完成
-
-| 任务 | 详情 |
-|------|------|
-| GitHub 仓库初始化 | 创建仓库 https://github.com/kkk6769/PolarBear-Monitor，26 个源文件初始提交 |
-| .gitignore | 排除编译产物（/*.exe）、运行时数据（data/）、IDE 配置 |
-| 下载链接迁移 | 全部 7 个文件 23 处链接从 home.polarbear.wtf → GitHub Raw |
-| Run Folder 纳入版本控制 | 预编译二进制随仓库分发，用户可直接下载使用 |
-| 文档同步更新 | README / CHANGELOG / PROGRESS 反映最新变更 |
-| **Bug 修复：Agent 离线误判** | 双流竞态+丢弃模式导致永久离线，三处修复完成 |
-| **Bug 修复：管理后台保存缓慢** | `saveAll()` 串行 PATCH → `Promise.all()` 并发 + 仅发送变更，20台从 ~3s → ~0.1s |
-
----
-
-## 三、待修复 (Bug)
+## 二、待修复 (Bug)
 
 （暂无）
 
 ---
 
-## 四、待新增 (Feature)
+## 三、待新增 (Feature)
 
 - 面板多UI支持,开放面板数据接口
 - 默认UI新增历史数据。
@@ -109,7 +95,7 @@
 
 ---
 
-## 五、已知限制
+## 四、已知限制
 
 - 仅支持 systemd Linux + Windows（无 OpenWrt procd 安装脚本）
 - 无 TLS/证书支持
