@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台 · PolarBear Monitor</title>
+<style>
+:root { --bg:#0b0f19; --surface:#141b2a; --border:#1e2a3e; --text:#c8d6e5; --text-dim:#6b7d95; --accent:#4f8cff; --green:#2ed573; --red:#ff4757; --radius:8px; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+.header { background:var(--surface); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; gap:16px; }
+.header h1 { font-size:18px; display:flex; align-items:center; gap:8px; }
+.header h1 span { font-size:22px; }
+.header a { color:var(--text-dim); text-decoration:none; font-size:13px; margin-left:auto; }
+.header a:hover { color:var(--accent); }
+.container { max-width:900px; margin:0 auto; padding:28px 20px; }
+.toolbar { display:flex; gap:10px; margin-bottom:20px; }
+.btn { border:1px solid var(--border); background:var(--surface); color:var(--text); padding:8px 18px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; transition:all .15s; }
+.btn:hover { border-color:var(--accent); color:var(--accent); }
+.btn.accent { background:var(--accent); border-color:var(--accent); color:#fff; }
+.btn.accent:hover { opacity:.85; }
+.btn.danger { border-color:var(--red); color:var(--red); }
+.btn.danger:hover { background:rgba(255,71,87,.1); }
+.btn.small { padding:5px 10px; font-size:11px; }
+.msg { padding:10px 16px; border-radius:6px; font-size:13px; margin-bottom:16px; display:none; }
+.msg.show { display:block; }
+.msg.ok { background:rgba(46,213,115,.12); color:var(--green); border:1px solid rgba(46,213,115,.2); }
+.msg.err { background:rgba(255,71,87,.12); color:var(--red); border:1px solid rgba(255,71,87,.2); }
+table { width:100%; border-collapse:collapse; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+th, td { padding:14px 18px; text-align:left; font-size:13px; border-bottom:1px solid var(--border); }
+th { background:rgba(79,140,255,.05); color:var(--text-dim); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(79,140,255,.03); }
+td input[type=text], td input[type=number] { background:var(--bg); border:1px solid var(--border); border-radius:5px; color:var(--text); padding:6px 10px; font-size:13px; width:100%; outline:none; }
+td input:focus { border-color:var(--accent); }
+.status { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; }
+.status .dot { width:6px; height:6px; border-radius:50%; }
+.status.online .dot { background:var(--green); }
+.status.offline .dot { background:var(--red); }
+.status.online { color:var(--green); }
+.status.offline { color:var(--red); }
+.actions { display:flex; gap:6px; }
+.empty { text-align:center; padding:60px 20px; color:var(--text-dim); font-size:14px; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; }
+.modal-overlay.show { display:flex; }
+.modal { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:28px; min-width:320px; text-align:center; }
+.modal h3 { margin-bottom:10px; }
+.modal p { color:var(--text-dim); font-size:13px; margin-bottom:20px; }
+.modal .actions { display:flex; gap:10px; justify-content:center; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span>⚙️</span> 管理后台</h1>
+  <a href="/">← 返回仪表盘</a>
+</div>
+
+<div class="container" id="main" style="display:none">
+  <div class="toolbar">
+    <button class="btn accent" onclick="saveAll()">💾 保存全部</button>
+    <button class="btn" onclick="loadServers()">🔄 刷新</button>
+    <button class="btn" onclick="logout()" style="margin-left:auto">退出登录</button>
+  </div>
+  <div class="msg" id="msg"></div>
+  <table id="table">
+    <thead><tr><th>排序</th><th>名称</th><th>备注</th><th>平台</th><th>状态</th><th>操作</th></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty" id="empty">暂无服务器数据</div>
+</div>
+
+<div class="container" id="login" style="max-width:400px;text-align:center;padding-top:80px">
+  <h2 style="margin-bottom:20px">🔐 管理后台登录</h2>
+  <input type="password" id="pw" placeholder="输入管理密码" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:10px 16px;font-size:15px;width:100%;outline:none;margin-bottom:12px;text-align:center" onkeydown="if(event.key==='Enter')doLogin()">
+  <button class="btn accent" onclick="doLogin()" style="width:100%;padding:12px;font-size:15px">登录</button>
+  <p id="loginErr" style="color:var(--red);font-size:13px;margin-top:12px;display:none"></p>
+  <a href="/" style="display:block;margin-top:20px;color:var(--text-dim);font-size:13px;text-decoration:none">← 返回仪表盘</a>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>确认删除</h3>
+    <p id="modalMsg"></p>
+    <div class="actions">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn danger" id="modalConfirm">确认删除</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let servers = [], pendingDelete = null;
+const tbody = document.getElementById('tbody');
+const empty = document.getElementById('empty');
+const msg = document.getElementById('msg');
+const modal = document.getElementById('modal');
+const main = document.getElementById('main');
+const login = document.getElementById('login');
+const loginErr = document.getElementById('loginErr');
+
+// auth check
+(async function init() {
+  try {
+    const res = await fetch('/api/v1/admin/check');
+    const data = await res.json();
+    if (data.ok) { main.style.display=''; login.style.display='none'; loadServers(); return; }
+  } catch(e) {}
+  main.style.display='none'; login.style.display='';
+})();
+
+async function doLogin() {
+  const pw = document.getElementById('pw').value;
+  try {
+    const res = await fetch('/api/v1/admin/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
+    const data = await res.json();
+    if (data.ok) { main.style.display=''; login.style.display='none'; loadServers(); }
+    else { loginErr.style.display=''; loginErr.textContent = data.error||'密码错误'; }
+  } catch(e) { loginErr.style.display=''; loginErr.textContent='网络错误'; }
+}
+
+async function logout() {
+  try { await fetch('/api/v1/admin/logout', { method: 'POST' }); } catch(e) {}
+  location.reload();
+}
+
+async function loadServers() {
+  try {
+    const res = await fetch('/api/v1/servers');
+    servers = await res.json();
+    render();
+    showMsg('ok', `已加载 ${servers.length} 台服务器`);
+  } catch(e) {
+    showMsg('err', '加载失败: ' + e.message);
+  }
+}
+
+function render() {
+  if (servers.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('table').style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  document.getElementById('table').style.display = '';
+  tbody.innerHTML = servers.map((s, i) => `
+    <tr>
+      <td style="width:80px">
+        <input type="number" value="${s.display_index}" min="0" style="width:60px" onchange="servers[${i}].display_index=parseInt(this.value)||0">
+      </td>
+      <td>
+        <input type="text" value="${esc(s.name)}" onchange="servers[${i}].name=this.value">
+      </td>
+      <td>
+        <input type="text" value="${esc(s.note||'')}" placeholder="请勿输入敏感隐私数据" onchange="servers[${i}].note=this.value" style="color:${s.note?'var(--text)':'var(--text-dim)'}">
+      </td>
+      <td style="font-size:12px;color:var(--text-dim)">
+        ${s.host ? esc(s.host.platform+' '+s.host.platform_version) : '--'}
+      </td>
+      <td>
+        <span class="status ${s.online?'online':'offline'}"><span class="dot"></span>${s.online?'在线':'离线'}</span>
+      </td>
+      <td>
+        <div class="actions">
+          ${!s.online ? `<button class="btn danger small" onclick="confirmDelete(${i})">🗑 删除</button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+async function saveAll() {
+  const order = servers.map((s,i) => ({id:s.id, display_index:parseInt(s.display_index)||i}));
+  const names = servers.map(s => ({id:s.id, name:s.name, note:s.note||''}));
+  try {
+    await fetch('/api/v1/reorder', {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+    for (const n of names) {
+      await fetch('/api/v1/server/'+n.id, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n.name, note:n.note})});
+    }
+    showMsg('ok', '保存成功！');
+  } catch(e) {
+    showMsg('err', '保存失败: ' + e.message);
+  }
+}
+
+function showMsg(type, text) { msg.className = 'msg show ' + type; msg.textContent = text; setTimeout(() => msg.classList.remove('show'), 3000); }
+
+function confirmDelete(i) {
+  pendingDelete = i;
+  document.getElementById('modalMsg').textContent = `确定要删除 "${servers[i].name}" 吗？`;
+  modal.classList.add('show');
+  document.getElementById('modalConfirm').onclick = () => { doDelete(pendingDelete); closeModal(); };
+}
+function closeModal() { modal.classList.remove('show'); }
+async function doDelete(i) {
+  try {
+    await fetch('/api/v1/server/'+servers[i].id, {method:'DELETE'});
+    servers.splice(i,1);
+    render();
+    showMsg('ok', '已删除');
+  } catch(e) { showMsg('err', '删除失败'); }
+}
+
+loadServers();
+</script>
+</body>
+</html>

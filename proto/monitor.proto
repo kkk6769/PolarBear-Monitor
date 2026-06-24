@@ -1,0 +1,57 @@
+syntax = "proto3";
+option go_package = "./proto";
+
+package proto;
+
+// ============================================================
+// PolarBear Monitor — 精简单向监控 Proto
+// 仅保留 Agent → Dashboard 的上报 RPC，无命令下发
+// ============================================================
+
+service MonitorService {
+  // Agent 持续流式上报实时系统状态（CPU、内存、磁盘、网络等）
+  rpc ReportSystemState(stream State) returns (Receipt) {}
+
+  // Agent 上报主机静态信息（首次连接或信息变更时）
+  rpc ReportSystemInfo(Host) returns (Receipt) {}
+}
+
+// ----------------------------------------------------------
+// 主机静态信息（Agent 启动时上报一次）
+// ----------------------------------------------------------
+message Host {
+  string platform = 1;         // 操作系统，如 "ubuntu"、"windows"
+  string platform_version = 2; // 操作系统版本
+  repeated string cpu = 3;     // CPU 型号列表
+  uint64 mem_total = 4;        // 内存总量 (字节)
+  uint64 disk_total = 5;       // 磁盘总量 (字节)
+  uint64 swap_total = 6;       // 交换分区总量 (字节)
+  string arch = 7;             // 系统架构，如 "amd64"、"arm64"
+  uint64 boot_time = 8;        // 系统启动时间 (Unix 时间戳)
+  string version = 9;          // Agent 版本号
+}
+
+// ----------------------------------------------------------
+// 实时系统状态（Agent 定时流式推送）
+// ----------------------------------------------------------
+message State {
+  double cpu = 1;              // CPU 实时占用率 (%)
+  uint64 mem_used = 2;         // 内存已用量 (字节)
+  uint64 swap_used = 3;        // 交换分区已用量 (字节)
+  uint64 disk_used = 4;        // 磁盘已用量 (字节)
+  uint64 net_in_transfer = 5;  // 网络入站累计 (字节)
+  uint64 net_out_transfer = 6; // 网络出站累计 (字节)
+  uint64 net_in_speed = 7;     // 网络入站实时速率 (字节/秒)
+  uint64 net_out_speed = 8;    // 网络出站实时速率 (字节/秒)
+  uint64 uptime = 9;           // 系统运行时长 (秒)
+  double load1 = 10;           // 1 分钟负载
+  double load5 = 11;           // 5 分钟负载
+  double load15 = 12;          // 15 分钟负载
+}
+
+// ----------------------------------------------------------
+// 通用回执
+// ----------------------------------------------------------
+message Receipt {
+  bool ok = 1;                 // 接收成功
+}
