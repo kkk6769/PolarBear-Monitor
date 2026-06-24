@@ -144,7 +144,8 @@ make dashboard-linux-arm64
 
 ## 项目结构
 
-```
+---
+
 polarbear-monitor/
 ├── proto/
 │   ├── monitor.proto          # Protobuf 定义（仅上报 RPC，无命令下发）
@@ -183,7 +184,8 @@ polarbear-monitor/
 ├── go.sum
 ├── README.md
 └── PROGRESS.md
-```
+
+---
 
 ---
 
