@@ -58,12 +58,13 @@ function ChartCard({ title, data, dataKey, color, domain }: {
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
       <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#4a4a55" />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
           <XAxis dataKey="idx" hide />
-          <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain || ['auto', 'auto']} />
+          <YAxis tick={{ fontSize: 10, fill: 'var(--muted-fg)' }} width={40} domain={domain || ['auto', 'auto']} />
           <Tooltip
             cursor={{ stroke: '#00D4FF', strokeDasharray: '3 3' }}
-            contentStyle={{ background: '#363641', border: '1px solid #4a4a55', borderRadius: 8, fontSize: 12 }}
+            contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 8, fontSize: 12, color: 'var(--card-fg)' }}
+            labelStyle={{ color: 'var(--muted-fg)' }}
             labelFormatter={(_: any, p: any) => p?.[0]?.payload?.time || ''}
           />
           <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.15} strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -81,12 +82,13 @@ function MultiChart({ title, keys, colors, domain, data }: {
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
       <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#4a4a55" />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
           <XAxis dataKey="idx" hide />
-          <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain} />
+          <YAxis tick={{ fontSize: 10, fill: 'var(--muted-fg)' }} width={40} domain={domain} />
           <Tooltip
             cursor={{ stroke: '#00D4FF', strokeDasharray: '3 3' }}
-            contentStyle={{ background: '#363641', border: '1px solid #4a4a55', borderRadius: 8, fontSize: 12 }}
+            contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 8, fontSize: 12, color: 'var(--card-fg)' }}
+            labelStyle={{ color: 'var(--muted-fg)' }}
             labelFormatter={(_: any, p: any) => p?.[0]?.payload?.time || ''}
           />
           {keys.map((k, i) => (
