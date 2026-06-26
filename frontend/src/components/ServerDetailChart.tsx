@@ -53,8 +53,7 @@ function ChartCard({ title, data, dataKey, color, domain }: {
           <Tooltip
             cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }}
             contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
-            formatter={(value: number) => [value.toFixed(1), title.split(' ')[0]]}
-            labelFormatter={() => ''}
+
           />
           <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
         </AreaChart>
@@ -77,8 +76,7 @@ function MultiChart({ title, keys, colors, domain, data }: {
           <Tooltip
             cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }}
             contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
-            formatter={(value: number, name: string) => [value.toFixed(1), name === 'mem' ? '内存' : 'Swap']}
-            labelFormatter={() => ''}
+
           />
           {keys.map((k, i) => (
             <Area key={k} type="monotone" dataKey={k} stroke={colors[i]} fill={colors[i]} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
