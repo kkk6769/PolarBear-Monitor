@@ -44,7 +44,7 @@ export default function ServerDetail() {
         </div>
 
         {/* Inline info items */}
-        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-1">
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-2">
           {server.online && server.uptime_fmt && <InfoItem label="运行时间" value={server.uptime_fmt} />}
           {h?.arch && <InfoItem label="架构" value={h.arch} />}
           {h?.mem_total ? <InfoItem label="内存总量" value={formatBytes(h.mem_total)} /> : null}
@@ -53,16 +53,17 @@ export default function ServerDetail() {
             <InfoItem label="地区" value={<span className="flex items-center gap-1">{server.ip_code ? <img src={`https://flagcdn.com/24x18/${server.ip_code.toLowerCase()}.png`} className="w-[16px] h-[11px] rounded-sm" alt="" /> : null}{server.ip_country}</span>} />
           )}
         </div>
-        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-1">
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-2">
           {h?.platform && <InfoItem label="系统" value={`${h.platform} ${h.platform_version || ''}`} />}
           {h?.cpu && h.cpu.length > 0 && <InfoItem label="CPU" value={h.cpu[0]} />}
         </div>
-        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-4">
-          {s && server.load1 !== '0.0' && <InfoItem label="负载" value={`${server.load1} / ${server.load5} / ${server.load15}`} />}
-          {s && <InfoItem label="上传" value={server.net_out_speed_fmt || '--'} />}
-          {s && <InfoItem label="下载" value={server.net_in_speed_fmt || '--'} />}
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-2">
+          {s && <InfoItem label="负载" value={`${server.load1} / ${server.load5} / ${server.load15}`} />}
         </div>
-
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-4">
+          {s && <InfoItem label="上传" value={s.net_out_transfer ? formatBytes(s.net_out_transfer) : '--'} />}
+          {s && <InfoItem label="下载" value={s.net_in_transfer ? formatBytes(s.net_in_transfer) : '--'} />}
+        </div>
         {/* Charts */}
         <ServerDetailChart server={server} history={history} />
       </div>
