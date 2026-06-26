@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import type { ServerDisplay } from '../types/polarbear';
 import { useT } from '../i18n';
+import { getLocalizedCountry } from '../lib/country';
 
 interface Props { server: ServerDisplay; }
 
 export default function ServerCard({ server }: Props) {
-  const { t } = useT();
-  const { online, name, state, host, ip_code, ip_country } = server;
+  const { t, lang } = useT();
+  const { online, name, state, host, ip_code } = server;
   const cpu = parseFloat(server.cpu_percent) || 0;
   const mp = server.mem_percent || 0;
   const dp = server.disk_percent || 0;
@@ -42,7 +43,7 @@ export default function ServerCard({ server }: Props) {
       <div className="px-3 pb-2 md:px-5 md:pb-3 flex justify-between text-[10px] text-muted-foreground opacity-60">
         <span>{t['card.uptime']} {server.uptime_fmt||t['card.na']}</span>
         <span className="truncate mx-2">{host ? host.platform + ' ' + host.platform_version : ''}</span>
-        <span>{ip_country ? `📍 ${ip_country}` : ''}</span>
+        <span>{ip_code ? `📍 ${getLocalizedCountry(ip_code, lang)}` : ''}</span>
       </div>
     </motion.div>
   );

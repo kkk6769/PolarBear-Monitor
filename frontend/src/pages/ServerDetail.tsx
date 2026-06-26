@@ -3,11 +3,12 @@ import { useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useWS } from '../hooks/use-ws';
 import { useT } from '../i18n';
+import { getLocalizedCountry } from '../lib/country';
 import Header from '../components/Header';
 import ServerDetailChart from '../components/ServerDetailChart';
 
 export default function ServerDetail() {
-  const { t } = useT();
+  const { t, lang } = useT();
   const { id } = useParams<{ id: string }>();
   const { servers, history, connected, onlineCount } = useWS();
 
@@ -53,8 +54,8 @@ export default function ServerDetail() {
           {h?.arch && <InfoItem label={t['detail.arch']} value={h.arch} />}
           {h?.mem_total ? <InfoItem label={t['detail.memTotal']} value={formatBytes(h.mem_total)} /> : null}
           {h?.disk_total ? <InfoItem label={t['detail.diskTotal']} value={formatBytes(h.disk_total)} /> : null}
-          {server.ip_country && (
-            <InfoItem label={t['detail.region']} value={<span className="flex items-center gap-1">{server.ip_code ? <img src={`https://flagcdn.com/24x18/${server.ip_code.toLowerCase()}.png`} className="w-[16px] h-[11px] rounded-sm" alt="" /> : null}{server.ip_country}</span>} />
+          {server.ip_code && (
+            <InfoItem label={t['detail.region']} value={<span className="flex items-center gap-1">{server.ip_code ? <img src={`https://flagcdn.com/24x18/${server.ip_code.toLowerCase()}.png`} className="w-[16px] h-[11px] rounded-sm" alt="" /> : null}{getLocalizedCountry(server.ip_code, lang)}</span>} />
           )}
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-2">
