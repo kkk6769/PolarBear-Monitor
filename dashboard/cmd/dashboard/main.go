@@ -670,6 +670,8 @@ func svrToDisplay(svr *model.Server) model.ServerDisplay {
 		d.DiskTotalFmt = model.FormatBytes(hostField(svr, "disk_total"))
 		d.NetInSpeedFmt = model.FormatBytesPerSec(s.NetInSpeed)
 		d.NetOutSpeedFmt = model.FormatBytesPerSec(s.NetOutSpeed)
+		d.NetInTransferFmt = model.FormatBytes(s.NetInTransfer)
+		d.NetOutTransferFmt = model.FormatBytes(s.NetOutTransfer)
 		d.DiskReadSpeedFmt = model.FormatBytesPerSec(s.DiskReadSpeed)
 		d.DiskWriteSpeedFmt = model.FormatBytesPerSec(s.DiskWriteSpeed)
 		d.UptimeFmt = model.FormatUptime(s.Uptime)

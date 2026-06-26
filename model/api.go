@@ -24,6 +24,8 @@ type ServerDisplay struct {
 	DiskPercent       int    `json:"disk_percent"`
 	NetInSpeedFmt     string `json:"net_in_speed_fmt"`
 	NetOutSpeedFmt    string `json:"net_out_speed_fmt"`
+	NetInTransferFmt  string `json:"net_in_transfer_fmt"`
+	NetOutTransferFmt string `json:"net_out_transfer_fmt"`
 	DiskReadSpeedFmt  string `json:"disk_read_speed_fmt"`
 	DiskWriteSpeedFmt string `json:"disk_write_speed_fmt"`
 	UptimeFmt         string `json:"uptime_fmt"`

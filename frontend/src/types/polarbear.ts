@@ -49,6 +49,8 @@ export interface ServerDisplay {
   disk_percent: number;
   net_in_speed_fmt: string;
   net_out_speed_fmt: string;
+  net_in_transfer_fmt: string;
+  net_out_transfer_fmt: string;
   disk_read_speed_fmt: string;
   disk_write_speed_fmt: string;
   uptime_fmt: string;
