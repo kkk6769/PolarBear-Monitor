@@ -18,6 +18,8 @@ type HostState struct {
 	Load1          float64 `json:"load1"`
 	Load5          float64 `json:"load5"`
 	Load15         float64 `json:"load15"`
+	DiskReadSpeed  uint64  `json:"disk_read_speed"`
+	DiskWriteSpeed uint64  `json:"disk_write_speed"`
 }
 
 // ToPB 转换为 Protobuf State
@@ -35,6 +37,8 @@ func (s *HostState) ToPB() *pb.State {
 		Load1:          s.Load1,
 		Load5:          s.Load5,
 		Load15:         s.Load15,
+		DiskReadSpeed:  s.DiskReadSpeed,
+		DiskWriteSpeed: s.DiskWriteSpeed,
 	}
 }
 
@@ -53,5 +57,7 @@ func PB2State(pb *pb.State) *HostState {
 		Load1:          pb.GetLoad1(),
 		Load5:          pb.GetLoad5(),
 		Load15:         pb.GetLoad15(),
+		DiskReadSpeed:  pb.GetDiskReadSpeed(),
+		DiskWriteSpeed: pb.GetDiskWriteSpeed(),
 	}
 }

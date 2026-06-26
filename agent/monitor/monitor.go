@@ -23,6 +23,9 @@ var (
 
 	netInSpeed, netOutSpeed, netInTransfer, netOutTransfer uint64
 	lastUpdateNetStats                                     uint64
+
+	diskReadSpeed, diskWriteSpeed, diskReadBytes, diskWriteBytes uint64
+	lastUpdateDiskStats                                          uint64
 )
 
 // GetHost 获取主机静态信息
@@ -102,6 +105,28 @@ func GetState() *model.HostState {
 			}
 		}
 	}
+
+	// 磁盘 IO 速率
+	if ioCounters, err := disk.IOCounters(); err == nil {
+		var totalRead, totalWrite uint64
+		for _, io := range ioCounters {
+			totalRead += io.ReadBytes
+			totalWrite += io.WriteBytes
+		}
+		now := uint64(time.Now().Unix())
+		if lastUpdateDiskStats > 0 {
+			interval := now - lastUpdateDiskStats
+			if interval > 0 {
+				diskReadSpeed = (totalRead - diskReadBytes) / interval
+				diskWriteSpeed = (totalWrite - diskWriteBytes) / interval
+			}
+		}
+		lastUpdateDiskStats = now
+		diskReadBytes = totalRead
+		diskWriteBytes = totalWrite
+	}
+	ret.DiskReadSpeed = diskReadSpeed
+	ret.DiskWriteSpeed = diskWriteSpeed
 
 	// 网络速率与流量
 	if netIO, err := net.IOCounters(false); err == nil && len(netIO) > 0 {

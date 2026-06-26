@@ -47,6 +47,8 @@ message State {
   double load1 = 10;           // 1 分钟负载
   double load5 = 11;           // 5 分钟负载
   double load15 = 12;          // 15 分钟负载
+  uint64 disk_read_speed = 13;  // 磁盘读取速率
+  uint64 disk_write_speed = 14; // 磁盘写入速率
 }
 
 // ----------------------------------------------------------
