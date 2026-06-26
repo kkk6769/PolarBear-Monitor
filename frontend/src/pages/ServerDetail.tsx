@@ -13,7 +13,7 @@ export default function ServerDetail() {
 
   if (!server) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center text-muted-foreground">
           <p className="text-lg mb-4">服务器未找到</p>
           <Link to="/" className="text-blue-400 hover:underline">← 返回首页</Link>
@@ -26,7 +26,7 @@ export default function ServerDetail() {
   const s = server.state;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen">
       <Header onlineCount={onlineCount} totalCount={servers.length} connected={connected} />
       <div className="mx-auto w-full max-w-5xl px-4 pt-4">
         {/* Back + Name + Status */}

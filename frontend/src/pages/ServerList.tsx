@@ -9,7 +9,7 @@ export default function ServerList() {
   const { servers, connected, onlineCount } = useWS();
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen">
       <Header onlineCount={onlineCount} totalCount={servers.length} connected={connected} />
 
       {servers.length > 0 && (
