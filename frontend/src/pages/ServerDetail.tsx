@@ -2,11 +2,12 @@ import { useParams, Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useWS } from '../hooks/use-ws';
+import Header from '../components/Header';
 import ServerDetailChart from '../components/ServerDetailChart';
 
 export default function ServerDetail() {
   const { id } = useParams<{ id: string }>();
-  const { servers, history } = useWS();
+  const { servers, history, connected, onlineCount } = useWS();
 
   const server = useMemo(() => servers.find(s => s.id === Number(id)), [servers, id]);
 
@@ -26,7 +27,8 @@ export default function ServerDetail() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto w-full max-w-5xl px-4 py-4">
+      <Header onlineCount={onlineCount} totalCount={servers.length} connected={connected} />
+      <div className="mx-auto w-full max-w-5xl px-4 pt-4">
         {/* Back + Name + Status */}
         <div className="flex items-center gap-2 mb-3">
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -64,6 +66,7 @@ export default function ServerDetail() {
           {s && <InfoItem label="上传" value={s.net_out_transfer ? formatBytes(s.net_out_transfer) : '--'} />}
           {s && <InfoItem label="下载" value={s.net_in_transfer ? formatBytes(s.net_in_transfer) : '--'} />}
         </div>
+
         {/* Charts */}
         <ServerDetailChart server={server} history={history} />
       </div>

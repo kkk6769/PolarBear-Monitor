@@ -790,10 +790,6 @@ video {
   padding-top: 8rem;
   padding-bottom: 8rem;
 }
-.py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -802,6 +798,9 @@ video {
 }
 .pb-4 {
   padding-bottom: 1rem;
+}
+.pt-4 {
+  padding-top: 1rem;
 }
 .pt-6 {
   padding-top: 1.5rem;
