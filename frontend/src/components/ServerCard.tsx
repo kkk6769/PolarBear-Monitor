@@ -38,7 +38,7 @@ export default function ServerCard({ server }: Props) {
         <div className="px-3 pb-3 md:px-5 md:pb-5 text-center text-muted-foreground text-xs">Waiting...</div>
       )}
       <div className="px-3 pb-2 md:px-5 md:pb-3 flex justify-between text-[10px] text-muted-foreground/60">
-        <span>Uptime{server.uptime_fmt||'--'}</span>
+        <span>Uptime {server.uptime_fmt||'--'}</span>
         <span className="truncate mx-2">{host ? host.platform + ' ' + host.platform_version : ''}</span>
         <span>{ip_country || ''}</span>
       </div>
