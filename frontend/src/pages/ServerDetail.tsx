@@ -1,7 +1,7 @@
-﻿import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { useWS } from '../hooks/use-ws.tsx';
+import { useWS } from '../hooks/use-ws';
 import type { ServerDisplay } from '../types/polarbear';
 import ServerDetailChart from '../components/ServerDetailChart';
 
@@ -15,8 +15,8 @@ export default function ServerDetail() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center text-muted-foreground">
-          <p className="text-lg mb-4">æœåŠ¡å™¨æœªæ‰¾åˆ°</p>
-          <Link to="/" className="text-blue-400 hover:underline">â† è¿”å›žé¦–é¡µ</Link>
+          <p className="text-lg mb-4">服务器未找到</p>
+          <Link to="/" className="text-blue-400 hover:underline">← 返回首页</Link>
         </div>
       </div>
     );
@@ -25,7 +25,6 @@ export default function ServerDetail() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto w-full max-w-5xl px-4 py-6">
-        {/* Back button + name */}
         <div className="flex items-center gap-3 mb-6">
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft size={20} />
@@ -37,14 +36,12 @@ export default function ServerDetail() {
             <h1 className="text-lg font-bold">{server.name}</h1>
           </div>
           <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${server.online ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
-            {server.online ? 'åœ¨çº¿' : 'ç¦»çº¿'}
+            {server.online ? '在线' : '离线'}
           </span>
         </div>
 
-        {/* Overview info grid */}
         <ServerInfoGrid server={server} />
 
-        {/* Charts */}
         <div className="mt-6">
           <ServerDetailChart server={server} history={history} />
         </div>
@@ -58,17 +55,17 @@ function ServerInfoGrid({ server }: { server: ServerDisplay }) {
   const s = server.state;
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      <InfoCard label="è¿è¡Œæ—¶é—´" value={server.uptime_fmt || '--'} />
-      <InfoCard label="ç³»ç»Ÿ" value={h ? `${h.platform} ${h.platform_version}` : '--'} />
+      <InfoCard label="运行时间" value={server.uptime_fmt || '--'} />
+      <InfoCard label="系统" value={h ? `${h.platform} ${h.platform_version}` : '--'} />
       <InfoCard label="CPU" value={h?.cpu?.[0] || '--'} />
-      <InfoCard label="æž¶æž„" value={h?.arch || '--'} />
-      <InfoCard label="å†…å­˜" value={s ? `${server.mem_used_fmt} / ${server.mem_total_fmt}` : '--'} />
-      <InfoCard label="ç£ç›˜" value={s ? `${server.disk_used_fmt} / ${server.disk_total_fmt}` : '--'} />
-      <InfoCard label="ç½‘ç»œ â†‘" value={s ? server.net_out_speed_fmt : '--'} />
-      <InfoCard label="ç½‘ç»œ â†“" value={s ? server.net_in_speed_fmt : '--'} />
-      <InfoCard label="è´Ÿè½½" value={s ? `${s.load1} / ${s.load5} / ${s.load15}` : '--'} />
-      <InfoCard label="ç£ç›˜è¯»" value={s ? server.disk_read_speed_fmt : '--'} />
-      <InfoCard label="ç£ç›˜å†™" value={s ? server.disk_write_speed_fmt : '--'} />
+      <InfoCard label="架构" value={h?.arch || '--'} />
+      <InfoCard label="内存" value={s ? `${server.mem_used_fmt} / ${server.mem_total_fmt}` : '--'} />
+      <InfoCard label="磁盘" value={s ? `${server.disk_used_fmt} / ${server.disk_total_fmt}` : '--'} />
+      <InfoCard label="网络 ↑" value={s ? server.net_out_speed_fmt : '--'} />
+      <InfoCard label="网络 ↓" value={s ? server.net_in_speed_fmt : '--'} />
+      <InfoCard label="负载" value={s ? `${s.load1} / ${s.load5} / ${s.load15}` : '--'} />
+      <InfoCard label="磁盘读" value={s ? server.disk_read_speed_fmt : '--'} />
+      <InfoCard label="磁盘写" value={s ? server.disk_write_speed_fmt : '--'} />
       <InfoCard label="IP" value={server.ip || '--'} />
     </div>
   );
