@@ -26,9 +26,9 @@ export default function ServerDetail() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto w-full max-w-5xl px-4 py-6">
+      <div className="mx-auto w-full max-w-5xl px-4 py-4">
         {/* Back + Name + Status */}
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 mb-3">
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft size={20} />
           </Link>
@@ -44,7 +44,7 @@ export default function ServerDetail() {
         </div>
 
         {/* Inline info items */}
-        <div className="flex flex-wrap gap-x-6 gap-y-2 mb-6">
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 mb-4 text-xs">
           {server.online && server.uptime_fmt && (
             <InfoItem label="运行时间" value={server.uptime_fmt} />
           )}

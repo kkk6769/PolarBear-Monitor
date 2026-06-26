@@ -39,7 +39,7 @@ export default function ServerDetailChart({ server, history }: Props) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <ChartCard title="CPU 使用率 (%)" data={chartData} dataKey="cpu" color="#22C55E" domain={[0, 100]} />
       <ChartCard title="内存 / Swap 使用率 (%)" data={chartData} dataKeys={['mem', 'swap']} colors={['#EAB308', '#EF4444']} domain={[0, 100]} />
       <ChartCard title="磁盘使用率 (%)" data={chartData} dataKey="disk" color="#3B82F6" domain={[0, 100]} />
@@ -63,9 +63,9 @@ function ChartCard({
   domain?: [number, number];
 }) {
   return (
-    <div className="rounded-lg bg-card ring-1 ring-border p-4">
-      <div className="text-xs text-muted-foreground mb-3">{title}</div>
-      <ResponsiveContainer width="100%" height={180}>
+    <div className="rounded-lg bg-card ring-1 ring-border p-3">
+      <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
+      <ResponsiveContainer width="100%" height={140}>
         <AreaChart data={data} syncId="detailCharts">
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
           <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#A8A29E' }} interval="preserveStartEnd" />
