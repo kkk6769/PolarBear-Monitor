@@ -1,0 +1,48 @@
+export type Lang = 'zh' | 'en';
+
+export interface Translations {
+  'app.title': string;
+  'app.footer': string;
+  'header.admin': string;
+  'header.greeting': string;
+  'header.currentTime': string;
+  'overview.total': string;
+  'overview.online': string;
+  'overview.offline': string;
+  'overview.network': string;
+  'overview.up': string;
+  'overview.down': string;
+  'card.online': string;
+  'card.offline': string;
+  'card.cpu': string;
+  'card.mem': string;
+  'card.disk': string;
+  'card.up': string;
+  'card.down': string;
+  'card.waiting': string;
+  'card.uptime': string;
+  'card.na': string;
+  'detail.notFound': string;
+  'detail.back': string;
+  'detail.uptime': string;
+  'detail.arch': string;
+  'detail.memTotal': string;
+  'detail.diskTotal': string;
+  'detail.region': string;
+  'detail.os': string;
+  'detail.cpu': string;
+  'detail.load': string;
+  'detail.upload': string;
+  'detail.download': string;
+  'detail.collecting': string;
+  'chart.cpu': string;
+  'chart.memSwap': string;
+  'chart.disk': string;
+  'chart.netOut': string;
+  'chart.netIn': string;
+  'serverList.waiting': string;
+  'time.sec': string;
+  'time.min': string;
+  'time.hour': string;
+  'time.day': string;
+}

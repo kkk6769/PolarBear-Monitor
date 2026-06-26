@@ -2,10 +2,12 @@ import { useParams, Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useWS } from '../hooks/use-ws';
+import { useT } from '../i18n';
 import Header from '../components/Header';
 import ServerDetailChart from '../components/ServerDetailChart';
 
 export default function ServerDetail() {
+  const { t } = useT();
   const { id } = useParams<{ id: string }>();
   const { servers, history, connected, onlineCount } = useWS();
 
@@ -15,8 +17,8 @@ export default function ServerDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center text-muted-foreground">
-          <p className="text-lg mb-4">服务器未找到</p>
-          <Link to="/" className="text-blue-400 hover:underline">← 返回首页</Link>
+          <p className="text-lg mb-4">{t['detail.notFound']}</p>
+          <Link to="/" className="text-blue-400 hover:underline">{t['detail.back']}</Link>
         </div>
       </div>
     );
@@ -41,28 +43,28 @@ export default function ServerDetail() {
             <h1 className="text-lg font-bold">{server.name}</h1>
           </div>
           <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${server.online ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
-            {server.online ? '在线' : '离线'}
+            {server.online ? t['card.online'] : t['card.offline']}
           </span>
         </div>
 
         {/* Inline info items */}
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-2">
-          {server.online && server.uptime_fmt && <InfoItem label="运行时间" value={server.uptime_fmt} />}
-          {h?.arch && <InfoItem label="架构" value={h.arch} />}
-          {h?.mem_total ? <InfoItem label="内存总量" value={formatBytes(h.mem_total)} /> : null}
-          {h?.disk_total ? <InfoItem label="磁盘总量" value={formatBytes(h.disk_total)} /> : null}
+          {server.online && server.uptime_fmt && <InfoItem label={t['detail.uptime']} value={server.uptime_fmt} />}
+          {h?.arch && <InfoItem label={t['detail.arch']} value={h.arch} />}
+          {h?.mem_total ? <InfoItem label={t['detail.memTotal']} value={formatBytes(h.mem_total)} /> : null}
+          {h?.disk_total ? <InfoItem label={t['detail.diskTotal']} value={formatBytes(h.disk_total)} /> : null}
           {server.ip_country && (
-            <InfoItem label="地区" value={<span className="flex items-center gap-1">{server.ip_code ? <img src={`https://flagcdn.com/24x18/${server.ip_code.toLowerCase()}.png`} className="w-[16px] h-[11px] rounded-sm" alt="" /> : null}{server.ip_country}</span>} />
+            <InfoItem label={t['detail.region']} value={<span className="flex items-center gap-1">{server.ip_code ? <img src={`https://flagcdn.com/24x18/${server.ip_code.toLowerCase()}.png`} className="w-[16px] h-[11px] rounded-sm" alt="" /> : null}{server.ip_country}</span>} />
           )}
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-2">
-          {h?.platform && <InfoItem label="系统" value={`${h.platform} ${h.platform_version || ''}`} />}
-          {h?.cpu && h.cpu.length > 0 && <InfoItem label="CPU" value={h.cpu[0]} />}
+          {h?.platform && <InfoItem label={t['detail.os']} value={`${h.platform} ${h.platform_version || ''}`} />}
+          {h?.cpu && h.cpu.length > 0 && <InfoItem label={t['detail.cpu']} value={h.cpu[0]} />}
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-4">
-          {s && <InfoItem label="负载" value={`${server.load1} / ${server.load5} / ${server.load15}`} />}
-          {s && <InfoItem label="上传" value={s.net_out_transfer ? formatBytes(s.net_out_transfer) : '--'} />}
-          {s && <InfoItem label="下载" value={s.net_in_transfer ? formatBytes(s.net_in_transfer) : '--'} />}
+          {s && <InfoItem label={t['detail.load']} value={`${server.load1} / ${server.load5} / ${server.load15}`} />}
+          {s && <InfoItem label={t['detail.upload']} value={s.net_out_transfer ? formatBytes(s.net_out_transfer) : t['card.na']} />}
+          {s && <InfoItem label={t['detail.download']} value={s.net_in_transfer ? formatBytes(s.net_in_transfer) : t['card.na']} />}
         </div>
 
         {/* Charts */}

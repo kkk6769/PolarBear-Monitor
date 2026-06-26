@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import type { ServerDisplay, WSMessage } from '../types/polarbear';
+import { useT } from '../i18n';
 
 interface Props { server: ServerDisplay; history: WSMessage[]; }
 interface DataPoint { idx: number; time: string; cpu: number; mem: number; swap: number; disk: number; netIn: number; netOut: number; }
@@ -23,6 +24,7 @@ function buildData(history: WSMessage[], serverId: number, host: ServerDisplay['
 }
 
 export default function ServerDetailChart({ server, history }: Props) {
+  const { t } = useT();
   const [data, setData] = useState<DataPoint[]>([]);
   const tickRef = useRef(0);
 
@@ -33,18 +35,18 @@ export default function ServerDetailChart({ server, history }: Props) {
     }
   }, [history, server.id, server.host]);
 
-  if (data.length < 2) return <div className="text-center text-muted-foreground text-sm py-12">收集数据中...</div>;
+  if (data.length < 2) return <div className="text-center text-muted-foreground text-sm py-12">{t['detail.collecting']}</div>;
 
   return (
     <div className="space-y-3">
-      <ChartCard title="CPU 使用率 (%)" dataKey="cpu" color="#22C55E" domain={[0, 100]} data={data} />
+      <ChartCard title={t['chart.cpu']} dataKey="cpu" color="#22C55E" domain={[0, 100]} data={data} />
       <div className="grid grid-cols-2 gap-3">
-        <MultiChart title="内存 / Swap (%)" keys={['mem', 'swap']} colors={['#EAB308', '#EF4444']} domain={[0, 100]} data={data} />
-        <ChartCard title="磁盘使用率 (%)" dataKey="disk" color="#3B82F6" domain={[0, 100]} data={data} />
+        <MultiChart title={t['chart.memSwap']} keys={['mem', 'swap']} colors={['#EAB308', '#EF4444']} domain={[0, 100]} data={data} />
+        <ChartCard title={t['chart.disk']} dataKey="disk" color="#3B82F6" domain={[0, 100]} data={data} />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <ChartCard title="网络上行 (KB/s)" dataKey="netOut" color="#A855F7" data={data} />
-        <ChartCard title="网络下行 (KB/s)" dataKey="netIn" color="#60A5FA" data={data} />
+        <ChartCard title={t['chart.netOut']} dataKey="netOut" color="#A855F7" data={data} />
+        <ChartCard title={t['chart.netIn']} dataKey="netIn" color="#60A5FA" data={data} />
       </div>
     </div>
   );

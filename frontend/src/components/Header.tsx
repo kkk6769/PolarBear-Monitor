@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wifi, WifiOff, Settings, Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
+import { useT } from '../i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface Props {
   onlineCount: number;
@@ -11,16 +13,18 @@ interface Props {
 
 export default function Header({ onlineCount, totalCount, connected }: Props) {
   const { theme, toggle } = useTheme();
+  const { t, lang } = useT();
   const [timeStr, setTimeStr] = useState('');
 
   useEffect(() => {
+    const locale = lang === 'zh' ? 'zh-CN' : 'en-US';
     const tick = () => {
-      setTimeStr(new Date().toLocaleTimeString('zh-CN', { hour12: false }));
+      setTimeStr(new Date().toLocaleTimeString(locale, { hour12: false }));
     };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [lang]);
 
   const chars = [...timeStr];
 
@@ -36,14 +40,16 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
           >
             🐻‍❄️
           </motion.span>
-          <span className="sm:text-base text-sm font-medium text-foreground">PolarBear Monitor</span>
+          <span className="sm:text-base text-sm font-medium text-foreground">{t['app.title']}</span>
         </div>
 
         <div className="flex items-center gap-3 text-sm">
           <a href="/admin" className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors no-underline">
             <Settings size={14} />
-            <span className="hidden sm:inline">管理</span>
+            <span className="hidden sm:inline">{t['header.admin']}</span>
           </a>
+
+          <LanguageSwitcher />
 
           <span className="hidden h-4 w-px bg-border md:block" />
 
@@ -63,9 +69,9 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
 
       {/* Greeting line */}
       <div className="mt-10 md:mt-16">
-        <p className="text-base font-semibold text-foreground">👋 欢迎使用</p>
+        <p className="text-base font-semibold text-foreground">{t['header.greeting']}</p>
         <div className="flex items-baseline gap-1.5 mt-1">
-          <span className="text-sm font-medium text-muted-foreground">当前时间</span>
+          <span className="text-sm font-medium text-muted-foreground">{t['header.currentTime']}</span>
           <span className="text-sm font-semibold text-foreground tabular-nums">
             <AnimatePresence mode="popLayout">
               {chars.map((ch, i) => (

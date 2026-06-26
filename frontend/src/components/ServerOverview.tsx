@@ -1,10 +1,12 @@
 import type { ServerDisplay } from '../types/polarbear';
+import { useT } from '../i18n';
 
 interface Props {
   servers: ServerDisplay[];
 }
 
 export default function ServerOverview({ servers }: Props) {
+  const { t } = useT();
   const online = servers.filter(s => s.online).length;
   const offline = servers.length - online;
 
@@ -22,19 +24,19 @@ export default function ServerOverview({ servers }: Props) {
   return (
     <section className="mx-auto w-full max-w-5xl px-4">
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="总计" value={servers.length} dotColor="bg-blue-500" />
-        <StatCard label="在线" value={online} dotColor="bg-green-500" ping />
-        <StatCard label="离线" value={offline} dotColor="bg-red-500" />
+        <StatCard label={t['overview.total']} value={servers.length} dotColor="bg-blue-500" />
+        <StatCard label={t['overview.online']} value={online} dotColor="bg-green-500" ping />
+        <StatCard label={t['overview.offline']} value={offline} dotColor="bg-red-500" />
         <div className="rounded-lg bg-card shadow-md ring-1 ring-border hover:ring-[#00D4FF]/50 hover:shadow-lg hover:shadow-[#00D4FF]/10 transition-all cursor-default p-3">
-          <div className="text-xs text-muted-foreground mb-1">网络</div>
+          <div className="text-xs text-muted-foreground mb-1">{t['overview.network']}</div>
           <div className="space-y-1">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">↑ 上行</span>
+              <span className="text-muted-foreground">{t['overview.up']}</span>
               <span className="font-semibold">{formatSpeed(totalUpSpeed)}</span>
               <span className="text-[10px] text-muted-foreground opacity-60">{formatBytes(totalUpTransfer)}</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">↓ 下行</span>
+              <span className="text-muted-foreground">{t['overview.down']}</span>
               <span className="font-semibold">{formatSpeed(totalDownSpeed)}</span>
               <span className="text-[10px] text-muted-foreground opacity-60">{formatBytes(totalDownTransfer)}</span>
             </div>
