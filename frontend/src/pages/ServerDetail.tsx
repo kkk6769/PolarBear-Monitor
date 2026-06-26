@@ -44,38 +44,23 @@ export default function ServerDetail() {
         </div>
 
         {/* Inline info items */}
-        <div className="flex flex-wrap gap-x-4 gap-y-1.5 mb-4 text-xs">
-          {server.online && server.uptime_fmt && (
-            <InfoItem label="运行时间" value={server.uptime_fmt} />
-          )}
-          {h?.version && h.version !== 'dev' && <InfoItem label="Agent" value={h.version} />}
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-1">
+          {server.online && server.uptime_fmt && <InfoItem label="运行时间" value={server.uptime_fmt} />}
           {h?.arch && <InfoItem label="架构" value={h.arch} />}
           {h?.mem_total ? <InfoItem label="内存总量" value={formatBytes(h.mem_total)} /> : null}
           {h?.disk_total ? <InfoItem label="磁盘总量" value={formatBytes(h.disk_total)} /> : null}
-          {h?.swap_total ? <InfoItem label="Swap" value={formatBytes(h.swap_total)} /> : null}
-          {h?.platform && (
-            <InfoItem label="系统" value={`${h.platform} ${h.platform_version || ''}`} />
-          )}
-          {h?.cpu && h.cpu.length > 0 && <InfoItem label="CPU" value={h.cpu[0]} />}
           {server.ip_country && (
-            <InfoItem label="地区" value={
-              <span className="flex items-center gap-1">
-                {server.ip_code ? <img src={`https://flagcdn.com/24x18/${server.ip_code.toLowerCase()}.png`} className="w-[16px] h-[11px] rounded-sm" alt="" /> : null}
-                {server.ip_country}
-              </span>
-            } />
+            <InfoItem label="地区" value={<span className="flex items-center gap-1">{server.ip_code ? <img src={`https://flagcdn.com/24x18/${server.ip_code.toLowerCase()}.png`} className="w-[16px] h-[11px] rounded-sm" alt="" /> : null}{server.ip_country}</span>} />
           )}
-          {s && server.load1 !== '0.0' && (
-            <InfoItem label="负载" value={`${server.load1} / ${server.load5} / ${server.load15}`} />
-          )}
-          {s && <InfoItem label="网络 ↑" value={server.net_out_speed_fmt || '--'} />}
-          {s && <InfoItem label="网络 ↓" value={server.net_in_speed_fmt || '--'} />}
-          {s && server.disk_read_speed_fmt && (
-            <InfoItem label="磁盘读" value={server.disk_read_speed_fmt} />
-          )}
-          {s && server.disk_write_speed_fmt && (
-            <InfoItem label="磁盘写" value={server.disk_write_speed_fmt} />
-          )}
+        </div>
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-1">
+          {h?.platform && <InfoItem label="系统" value={`${h.platform} ${h.platform_version || ''}`} />}
+          {h?.cpu && h.cpu.length > 0 && <InfoItem label="CPU" value={h.cpu[0]} />}
+        </div>
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-4">
+          {s && server.load1 !== '0.0' && <InfoItem label="负载" value={`${server.load1} / ${server.load5} / ${server.load15}`} />}
+          {s && <InfoItem label="上传" value={server.net_out_speed_fmt || '--'} />}
+          {s && <InfoItem label="下载" value={server.net_in_speed_fmt || '--'} />}
         </div>
 
         {/* Charts */}
