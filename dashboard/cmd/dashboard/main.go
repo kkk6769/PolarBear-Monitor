@@ -231,7 +231,7 @@ func extractPeerIP(ctx context.Context) string {
 }
 
 // updateGeoIP resolves IP country with 7-day cache
-func updateGeoIP(serverID uint64, ip string) {
+func updateGeoIP(_ uint64, ip string) {
 	if ip == "" || isPrivateIP(ip) {
 		log.Printf("[geo] skip private/local IP: %s", ip)
 		return
