@@ -500,7 +500,7 @@ video {
   display: none;
 }
   * { margin:0;padding:0;box-sizing:border-box }
-  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#171412;color:#FAFAF8;min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5 }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#0a0f1e;color:#e4ecf7;min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5 }
 .absolute {
   position: absolute;
 }
@@ -707,7 +707,7 @@ video {
 }
 .bg-background {
   --tw-bg-opacity: 1;
-  background-color: rgb(23 20 18 / var(--tw-bg-opacity, 1));
+  background-color: rgb(10 15 30 / var(--tw-bg-opacity, 1));
 }
 .bg-blue-500 {
   --tw-bg-opacity: 1;
@@ -715,11 +715,11 @@ video {
 }
 .bg-border {
   --tw-bg-opacity: 1;
-  background-color: rgb(41 37 36 / var(--tw-bg-opacity, 1));
+  background-color: rgb(30 45 74 / var(--tw-bg-opacity, 1));
 }
 .bg-card {
   --tw-bg-opacity: 1;
-  background-color: rgb(10 10 9 / var(--tw-bg-opacity, 1));
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
 }
 .bg-green-500 {
   --tw-bg-opacity: 1;
@@ -730,7 +730,7 @@ video {
 }
 .bg-muted {
   --tw-bg-opacity: 1;
-  background-color: rgb(41 37 36 / var(--tw-bg-opacity, 1));
+  background-color: rgb(30 41 59 / var(--tw-bg-opacity, 1));
 }
 .bg-purple-500 {
   --tw-bg-opacity: 1;
@@ -866,7 +866,7 @@ video {
 }
 .text-foreground {
   --tw-text-opacity: 1;
-  color: rgb(250 250 248 / var(--tw-text-opacity, 1));
+  color: rgb(228 236 247 / var(--tw-text-opacity, 1));
 }
 .text-green-500 {
   --tw-text-opacity: 1;
@@ -874,10 +874,10 @@ video {
 }
 .text-muted-foreground {
   --tw-text-opacity: 1;
-  color: rgb(168 162 158 / var(--tw-text-opacity, 1));
+  color: rgb(148 163 184 / var(--tw-text-opacity, 1));
 }
 .text-muted-foreground\/60 {
-  color: rgb(168 162 158 / 0.6);
+  color: rgb(148 163 184 / 0.6);
 }
 .text-neutral-600\/50 {
   color: rgb(82 82 82 / 0.5);
@@ -917,7 +917,7 @@ video {
 }
 .ring-border {
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(41 37 36 / var(--tw-ring-opacity, 1));
+  --tw-ring-color: rgb(30 45 74 / var(--tw-ring-opacity, 1));
 }
 .ring-green-500 {
   --tw-ring-opacity: 1;
@@ -954,7 +954,7 @@ video {
 }
 .hover\:text-foreground:hover {
   --tw-text-opacity: 1;
-  color: rgb(250 250 248 / var(--tw-text-opacity, 1));
+  color: rgb(228 236 247 / var(--tw-text-opacity, 1));
 }
 .hover\:underline:hover {
   text-decoration-line: underline;
@@ -965,7 +965,7 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 .hover\:ring-muted-foreground\/30:hover {
-  --tw-ring-color: rgb(168 162 158 / 0.3);
+  --tw-ring-color: rgb(148 163 184 / 0.3);
 }
 @media (min-width: 640px) {
 

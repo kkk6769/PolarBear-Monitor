@@ -58,12 +58,12 @@ function ChartCard({ title, data, dataKey, color, domain }: {
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
       <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#1e2d4a" />
           <XAxis dataKey="idx" hide />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain || ['auto', 'auto']} />
           <Tooltip
-            cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }}
-            contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
+            cursor={{ stroke: '#334155', strokeDasharray: '3 3' }}
+            contentStyle={{ background: '#111827', border: '1px solid #1e2d4a', borderRadius: 8, fontSize: 12 }}
             labelFormatter={(_: any, p: any) => p?.[0]?.payload?.time || ''}
           />
           <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -81,12 +81,12 @@ function MultiChart({ title, keys, colors, domain, data }: {
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
       <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#1e2d4a" />
           <XAxis dataKey="idx" hide />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain} />
           <Tooltip
-            cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }}
-            contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
+            cursor={{ stroke: '#334155', strokeDasharray: '3 3' }}
+            contentStyle={{ background: '#111827', border: '1px solid #1e2d4a', borderRadius: 8, fontSize: 12 }}
             labelFormatter={(_: any, p: any) => p?.[0]?.payload?.time || ''}
           />
           {keys.map((k, i) => (
