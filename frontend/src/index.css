@@ -4,10 +4,15 @@
 
 @layer base {
   * { margin:0;padding:0;box-sizing:border-box }
-  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#f5f5f7;color:#1a1a21;min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5 }
-}
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5 }
 
-.dark body { background:#16161c;color:#e8e8ed }
-.dark .bg-card { background:#2C2C34 }
-.dark .text-muted-foreground { color:#8e8e99 }
-.dark .border-border, .dark .ring-border { border-color:#3a3a44 }
+  :root {
+    --bg: #f5f5f7;
+    --fg: #1a1a21;
+  }
+  .dark {
+    --bg: #16161c;
+    --fg: #e8e8ed;
+  }
+  body { background: var(--bg); color: var(--fg); }
+}
