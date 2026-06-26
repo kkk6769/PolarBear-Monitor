@@ -28,7 +28,7 @@ export default function App() {
             </code>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {servers.map((s) => (
               <ServerCard key={s.id} server={s} />
             ))}
