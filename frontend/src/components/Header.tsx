@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Wifi, WifiOff, Settings, Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 
@@ -10,9 +11,16 @@ interface Props {
 
 export default function Header({ onlineCount, totalCount, connected }: Props) {
   const { theme, toggle } = useTheme();
-  const now = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-  const hours = now.split(':')[0];
-  const minutes = now.split(':')[1];
+  const [timeStr, setTimeStr] = useState('');
+
+  useEffect(() => {
+    const tick = () => {
+      setTimeStr(new Date().toLocaleTimeString('zh-CN', { hour12: false }));
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <header className="mx-auto w-full max-w-5xl px-4 pt-6">
@@ -53,11 +61,21 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
 
       {/* Greeting line */}
       <div className="mt-10 md:mt-16">
-        <p className="text-base font-semibold">👋 你好</p>
-        <div className="flex items-baseline gap-1">
-          <span className="text-sm font-medium opacity-50 tabular-nums w-[21px]">{hours}</span>
-          <span className="mb-px font-medium text-sm opacity-50">:</span>
-          <span className="text-sm font-medium opacity-50 tabular-nums w-[21px]">{minutes}</span>
+        <p className="text-base font-semibold text-foreground">👋 欢迎使用</p>
+        <div className="flex items-baseline gap-1.5 mt-1">
+          <span className="text-sm font-medium text-muted-foreground">当前时间</span>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={timeStr}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25 }}
+              className="text-sm font-semibold text-foreground tabular-nums"
+            >
+              {timeStr}
+            </motion.span>
+          </AnimatePresence>
         </div>
       </div>
     </header>
