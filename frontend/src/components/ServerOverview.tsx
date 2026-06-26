@@ -19,17 +19,17 @@ export default function ServerOverview({ servers }: Props) {
   return (
     <section className="mx-auto w-full max-w-5xl px-4">
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="Total" value={servers.length} ringColor="ring-blue-500" dotColor="bg-blue-500" />
-        <StatCard label="Online" value={online} ringColor="ring-green-500" dotColor="bg-green-500" ping />
-        <StatCard label="Offline" value={offline} ringColor="ring-red-500" dotColor="bg-red-500" />
-        <StatCard label="Network" value={formatSpeed(totalUp + totalDown)} ringColor="ring-purple-500" dotColor="bg-purple-500" />
+        <StatCard label="Total" value={servers.length} dotColor="bg-blue-500" />
+        <StatCard label="Online" value={online} dotColor="bg-green-500" ping />
+        <StatCard label="Offline" value={offline} dotColor="bg-red-500" />
+        <StatCard label="Network" value={formatSpeed(totalUp + totalDown)} dotColor="bg-purple-500" />
       </div>
     </section>
   );
 }
 
-function StatCard({ label, value, ringColor, dotColor, ping }: {
-  label: string; value: number | string; ringColor: string; dotColor: string; ping?: boolean;
+function StatCard({ label, value, dotColor, ping }: {
+  label: string; value: number | string; dotColor: string; ping?: boolean;
 }) {
   return (
     <div className="rounded-lg bg-card shadow-md ring-1 ring-border hover:ring-[#00D4FF]/50 hover:shadow-lg hover:shadow-[#00D4FF]/10 transition-all cursor-default">
