@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wifi, WifiOff, Settings, Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
@@ -12,6 +12,7 @@ interface Props {
 export default function Header({ onlineCount, totalCount, connected }: Props) {
   const { theme, toggle } = useTheme();
   const [timeStr, setTimeStr] = useState('');
+  const tickRef = useRef<Record<number, number>>({});
 
   useEffect(() => {
     const tick = () => {
@@ -21,6 +22,17 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
+
+  const chars = [...timeStr];
+  const prev = useRef<string[]>([]);
+
+  // bump version for positions where char changed
+  chars.forEach((ch, i) => {
+    if (prev.current[i] !== ch) {
+      tickRef.current[i] = (tickRef.current[i] || 0) + 1;
+    }
+  });
+  prev.current = chars;
 
   return (
     <header className="mx-auto w-full max-w-5xl px-4 pt-6">
@@ -64,18 +76,22 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
         <p className="text-base font-semibold text-foreground">👋 欢迎使用</p>
         <div className="flex items-baseline gap-1.5 mt-1">
           <span className="text-sm font-medium text-muted-foreground">当前时间</span>
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={timeStr}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.25 }}
-              className="text-sm font-semibold text-foreground tabular-nums"
-            >
-              {timeStr}
-            </motion.span>
-          </AnimatePresence>
+          <span className="text-sm font-semibold text-foreground tabular-nums">
+            {chars.map((ch, i) => (
+              <AnimatePresence key={i} mode="popLayout">
+                <motion.span
+                  key={`${i}-${tickRef.current[i] || 0}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-block"
+                >
+                  {ch}
+                </motion.span>
+              </AnimatePresence>
+            ))}
+          </span>
         </div>
       </div>
     </header>
