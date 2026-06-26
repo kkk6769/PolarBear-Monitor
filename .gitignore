@@ -13,6 +13,10 @@ data/
 *.db-wal
 *.db-shm
 
+# ---------- Node / Frontend ----------
+frontend/node_modules/
+frontend/dist/
+
 # ---------- Go ----------
 *.test
 *.out

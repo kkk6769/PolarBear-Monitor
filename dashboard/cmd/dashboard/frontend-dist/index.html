@@ -1,127 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PolarBear Monitor</title>
-<link rel="icon" type="image/png" href="/favicon.png">
-<style>
-:root { --bg:#0b0f19; --surface:#141b2a; --border:#1e2a3e; --text:#c8d6e5; --text-dim:#6b7d95; --accent:#4f8cff; --green:#2ed573; --yellow:#ffa502; --red:#ff4757; --cpu:#ff6b6b; --mem:#ffa502; --net-up:#2ed573; --net-down:#ffa502; --radius:10px; }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; line-height:1.5; -webkit-font-smoothing:antialiased; }
-.header { background:var(--surface); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:100; }
-.header h1 { font-size:19px; font-weight:700; display:flex; align-items:center; gap:10px; white-space:nowrap; }
-.header h1 span { font-size:24px; }
-.header .nav { margin-left:auto; display:flex; align-items:center; gap:18px; font-size:12px; white-space:nowrap; flex-wrap:wrap; }
-.header .nav a { color:var(--text-dim); text-decoration:none; transition:color .15s; }
-.header .nav a:hover { color:var(--accent); }
-.header .dot { display:inline-block; width:7px; height:7px; border-radius:50%; }
-.header .dot.online { background:var(--green); box-shadow:0 0 5px var(--green); }
-.header .dot.offline { background:var(--red); }
-.container { max-width:1440px; margin:0 auto; padding:24px 28px; }
-.grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap:18px; }
-.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.3); transition:border-color .2s; }
-.card:hover { border-color:#2a3a5c; }
-.card.offline { opacity:.7; }
-.card-header { padding:16px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
-.card-header .server-name { font-size:14px; font-weight:600; display:flex; align-items:center; gap:8px; }
-.status-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:16px; font-size:11px; font-weight:600; }
-.status-badge.online { background:rgba(46,213,115,.12); color:var(--green); }
-.status-badge.offline { background:rgba(255,71,87,.12); color:var(--red); }
-.status-badge .pulse { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-.card-body { padding:18px 20px; }
-.metrics-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:12px; }
-.metric { background:var(--bg); border-radius:7px; padding:12px 14px; text-align:center; }
-.metric .label { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
-.metric .value { font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; }
-.metric .sub { font-size:10px; color:var(--text-dim); margin-top:2px; }
-.cpu-color { color:var(--cpu); } .mem-color { color:var(--mem); } .disk-color { color:var(--accent); } .net-color-up { color:var(--net-up); } .net-color-down { color:var(--net-down); }
-.bar-wrap { margin-top:3px; height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
-.bar-fill { height:100%; border-radius:2px; transition:width .5s ease; }
-.load-row { display:flex; gap:14px; font-size:11px; color:var(--text-dim); margin-top:6px; }
-.card-footer { padding:9px 20px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; font-size:10px; color:var(--text-dim); }
-.empty-state { text-align:center; padding:80px 40px; color:var(--text-dim); }
-.empty-state .icon { font-size:56px; margin-bottom:14px; opacity:.5; }
-.empty-state p { font-size:15px; margin-bottom:6px; }
-.empty-state code { background:var(--surface); padding:6px 14px; border-radius:5px; font-size:12px; display:inline-block; margin-top:10px; }
-@media (max-width:900px) { .container { padding:14px; } .grid { grid-template-columns:1fr; } .header { padding:10px 14px; } }
-</style>
-</head>
-<body>
-
-<div class="header">
-  <h1><span>🐻‍❄️</span> PolarBear Monitor</h1>
-  <div class="nav">
-    <span id="connStatus">● 未连接</span>
-    <span><span class="dot online" id="statusDot"></span> <span id="serverCount">0</span> 在线</span>
-    <a href="/admin">⚙️ 管理后台</a>
-    <span id="clock">--</span>
-  </div>
-</div>
-
-<div class="container">
-  <div class="grid" id="grid"></div>
-  <div id="empty" class="empty-state" style="display:none">
-    <div class="icon">📡</div>
-    <p>等待 Agent 连接...</p>
-    <p style="font-size:12px">在目标机器上运行 <code>./polarbear-agent</code></p>
-  </div>
-</div>
-
-<script>
-const grid = document.getElementById('grid');
-const empty = document.getElementById('empty');
-const statusDot = document.getElementById('statusDot');
-const serverCount = document.getElementById('serverCount');
-const connStatus = document.getElementById('connStatus');
-const clock = document.getElementById('clock');
-
-let ws, servers = [];
-
-function connect() {
-  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-  ws = new WebSocket(proto + '://' + location.host + '/ws');
-  ws.onopen = () => { connStatus.style.color='var(--green)'; connStatus.textContent = '● 已连接'; };
-  ws.onmessage = (ev) => { servers = JSON.parse(ev.data).data || []; render(); };
-  ws.onclose = () => { connStatus.style.color='var(--red)'; connStatus.textContent = '● 重连中'; setTimeout(connect, 2000); };
-  ws.onerror = () => ws.close();
-}
-
-function render() {
-  const online = servers.filter(s => s.online).length;
-  serverCount.textContent = online;
-  statusDot.className = 'dot ' + (online > 0 ? 'online' : 'offline');
-  if (servers.length === 0) { grid.innerHTML=''; empty.style.display='block'; return; }
-  empty.style.display = 'none';
-  grid.innerHTML = servers.map(s => {
-    const cpu = parseFloat(s.cpu_percent) || 0;
-    const mp = s.mem_percent || 0;
-    const dp = s.disk_percent || 0;
-    return `<div class="card${s.online?'':' offline'}">
-      <div class="card-header">
-        <div class="server-name">${s.ip_code ? `<img src="https://flagcdn.com/24x18/${s.ip_code.toLowerCase()}.png" style="width:18px;height:14px;vertical-align:middle;border-radius:2px" alt="">` : '🖥️'} ${esc(s.name)}</div>
-        <span class="status-badge ${s.online?'online':'offline'}">${s.online?'<span class="pulse"></span> 在线':'离线'}</span>
-      </div>
-      ${s.state ? `
-      <div class="card-body">
-        <div class="metrics-row">
-          <div class="metric"><div class="label">CPU</div><div class="value cpu-color">${s.cpu_percent||'--'}</div><div class="bar-wrap"><div class="bar-fill" style="width:${Math.min(cpu,100)}%;background:var(--cpu)"></div></div><div class="load-row"><span>1m ${s.load1||'-'}</span><span>5m ${s.load5||'-'}</span><span>15m ${s.load15||'-'}</span></div></div>
-          <div class="metric"><div class="label">内存</div><div class="value mem-color">${s.mem_used_fmt||'--'}</div><div class="sub">/ ${s.mem_total_fmt||'--'}</div><div class="bar-wrap"><div class="bar-fill" style="width:${mp}%;background:var(--mem)"></div></div></div>
-        </div>
-        <div class="metrics-row">
-          <div class="metric"><div class="label">磁盘</div><div class="value disk-color">${s.disk_used_fmt||'--'}</div><div class="sub">/ ${s.disk_total_fmt||'--'}</div><div class="bar-wrap"><div class="bar-fill" style="width:${dp}%;background:var(--accent)"></div></div></div>
-          <div class="metric"><div class="label">网络 ↑</div><div class="value net-color-up">${s.net_out_speed_fmt||'--'}</div><div class="label" style="margin-top:5px">网络 ↓</div><div class="value net-color-down">${s.net_in_speed_fmt||'--'}</div></div>
-        </div>
-      </div>
-      ` : '<div class="card-body"><p style="color:var(--text-dim);text-align:center">等待数据...</p></div>'}
-      <div class="card-footer"><span>🕐 ${s.uptime_fmt||'--'}</span><span>${s.host?esc(s.host.platform+' '+s.host.platform_version):''} · ${s.host?s.host.arch:''}</span><span>${s.ip_country?'📍'+esc(s.ip_country):''}</span></div>
-    </div>`;
-  }).join('');
-}
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-setInterval(() => clock.textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false}), 1000);
-connect();
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PolarBear Monitor</title>
+    <script type="module" crossorigin src="/assets/index-DWJ2Jart.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DPtJZeGl.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
