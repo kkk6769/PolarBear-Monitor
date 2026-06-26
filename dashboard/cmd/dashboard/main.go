@@ -257,7 +257,7 @@ func updateGeoIP(_ uint64, ip string) {
 }
 
 func fetchIPCountry(ip string) (country, countryCode string) {
-	resp, err := geoClient.Get("http://ip-api.com/json/" + ip + "?lang=zh-CN&fields=country,countryCode")
+	resp, err := geoClient.Get("http://ip-api.com/json/" + ip + "?lang=en&fields=country,countryCode")
 	if err != nil {
 		log.Printf("[geo] request failed for %s: %v", ip, err)
 		return "", ""

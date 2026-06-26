@@ -11,10 +11,10 @@ export function formatBytesPerSec(b: number): string {
 }
 
 export function formatUptime(sec: number): string {
-  if (sec < 60) return sec + '秒';
-  if (sec < 3600) return Math.floor(sec / 60) + '分钟';
+  if (sec < 60) return sec + 's';
+  if (sec < 3600) return Math.floor(sec / 60) + 'm';
   const days = Math.floor(sec / 86400);
   const hours = Math.floor((sec % 86400) / 3600);
-  if (days > 0) return days + '天 ' + hours + '小时';
-  return Math.floor(sec / 3600) + '小时 ' + Math.floor((sec % 3600) / 60) + '分钟';
+  if (days > 0) return days + 'd ' + hours + 'h';
+  return Math.floor(sec / 3600) + 'h ' + Math.floor((sec % 3600) / 60) + 'm';
 }

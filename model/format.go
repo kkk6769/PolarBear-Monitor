@@ -21,18 +21,18 @@ func FormatBytesPerSec(b uint64) string {
 	return FormatBytes(b) + "/s"
 }
 
-// FormatUptime converts seconds to human-readable string (e.g., "3天 12小时")
+// FormatUptime converts seconds to human-readable string (e.g., "3d 12h")
 func FormatUptime(sec uint64) string {
 	if sec < 60 {
-		return fmt.Sprintf("%d秒", sec)
+		return fmt.Sprintf("%ds", sec)
 	}
 	if sec < 3600 {
-		return fmt.Sprintf("%d分钟", sec/60)
+		return fmt.Sprintf("%dm", sec/60)
 	}
 	days := sec / 86400
 	hours := (sec % 86400) / 3600
 	if days > 0 {
-		return fmt.Sprintf("%d天 %d小时", days, hours)
+		return fmt.Sprintf("%dd %dh", days, hours)
 	}
-	return fmt.Sprintf("%d小时 %d分钟", sec/3600, (sec%3600)/60)
+	return fmt.Sprintf("%dh %dm", sec/3600, (sec%3600)/60)
 }
