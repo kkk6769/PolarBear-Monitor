@@ -9,7 +9,7 @@ interface Props {
 
 export default function Header({ onlineCount, totalCount, connected }: Props) {
   return (
-    <header className="sticky top-0 z-50 bg-[var(--surface)]/80 backdrop-blur border-b border-[var(--border-clr)]">
+    <header className="sticky top-0 z-50 bg-surface/80 backdrop-blur border-b border-border">
       <div className="max-w-[1440px] mx-auto px-6 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <motion.span
@@ -19,34 +19,34 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
           >
             🐻‍❄️
           </motion.span>
-          <h1 className="text-lg font-bold text-[var(--text-clr)] tracking-tight">PolarBear Monitor</h1>
+          <h1 className="text-lg font-bold text-text tracking-tight">PolarBear Monitor</h1>
         </div>
 
         <nav className="flex items-center gap-5 text-sm">
-          <span className="flex items-center gap-1.5 text-[var(--text-dim)]">
+          <span className="flex items-center gap-1.5 text-text-dim">
             {connected ? (
-              <Wifi size={14} className="text-[var(--green)]" />
+              <Wifi size={14} className="text-green" />
             ) : (
-              <WifiOff size={14} className="text-[var(--red)]" />
+              <WifiOff size={14} className="text-red" />
             )}
             {connected ? '已连接' : '重连中'}
           </span>
 
           <span className="flex items-center gap-1.5">
-            <span className={`inline-block w-2 h-2 rounded-full ${onlineCount > 0 ? 'bg-[var(--green)] shadow-[0_0_6px_var(--green)]' : 'bg-[var(--red)]'}`} />
-            <span className="text-[var(--text-dim)]">{onlineCount}</span>
-            <span className="text-[var(--text-dim)]/50">/ {totalCount} 在线</span>
+            <span className={`inline-block w-2 h-2 rounded-full ${onlineCount > 0 ? 'bg-green shadow-[0_0_6px_var(--color-green)]' : 'bg-red'}`} />
+            <span className="text-text-dim">{onlineCount}</span>
+            <span className="text-text-dim/50">/ {totalCount} 在线</span>
           </span>
 
           <a
             href="/admin"
-            className="flex items-center gap-1 text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors no-underline"
+            className="flex items-center gap-1 text-text-dim hover:text-accent transition-colors no-underline"
           >
             <Settings size={14} />
             管理后台
           </a>
 
-          <span className="text-[var(--text-dim)] tabular-nums">
+          <span className="text-text-dim tabular-nums">
             {new Date().toLocaleTimeString('zh-CN', { hour12: false })}
           </span>
         </nav>

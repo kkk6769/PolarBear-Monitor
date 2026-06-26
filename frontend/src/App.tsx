@@ -11,10 +11,10 @@ export default function App() {
 
       <main className="max-w-[1440px] mx-auto px-6 py-6">
         {servers.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 text-[var(--text-dim)]">
+          <div className="flex flex-col items-center justify-center py-32 text-text-dim">
             <span className="text-6xl mb-4 opacity-40">📡</span>
             <p className="text-base mb-1">等待 Agent 连接...</p>
-            <code className="bg-[var(--surface)] px-4 py-2 rounded-lg text-xs mt-3 border border-[var(--border-clr)]">
+            <code className="bg-surface px-4 py-2 rounded-lg text-xs mt-3 border border-border">
               ./polarbear-agent
             </code>
           </div>

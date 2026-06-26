@@ -16,10 +16,10 @@ export default function ServerCard({ server }: Props) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`rounded-xl border bg-[var(--surface)]/70 backdrop-blur overflow-hidden transition-all duration-300 hover:border-[var(--accent)]/30 hover:shadow-lg hover:shadow-[var(--accent)]/5 ${!online ? 'opacity-60' : ''}`}
+      className={`rounded-xl border bg-surface/70 backdrop-blur overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-lg ${!online ? 'opacity-60' : ''}`}
     >
       {/* Header */}
-      <div className="px-5 py-4 flex items-center justify-between border-b border-[var(--border-clr)]">
+      <div className="px-5 py-4 flex items-center justify-between border-b border-border">
         <div className="flex items-center gap-2.5 font-semibold text-sm">
           {ip_code ? (
             <img
@@ -30,15 +30,15 @@ export default function ServerCard({ server }: Props) {
           ) : (
             <span className="text-base">🖥️</span>
           )}
-          <span className="text-[var(--text-clr)] truncate max-w-[200px]">{name}</span>
+          <span className="text-text truncate max-w-[200px]">{name}</span>
         </div>
         <span
           className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-            online ? 'bg-[var(--green)]/10 text-[var(--green)]' : 'bg-[var(--red)]/10 text-[var(--red)]'
+            online ? 'bg-green/10 text-green' : 'bg-red/10 text-red'
           }`}
         >
           {online && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
           )}
           {online ? '在线' : '离线'}
         </span>
@@ -98,11 +98,11 @@ export default function ServerCard({ server }: Props) {
           </div>
         </div>
       ) : (
-        <div className="px-5 py-8 text-center text-[var(--text-dim)] text-sm">等待数据...</div>
+        <div className="px-5 py-8 text-center text-text-dim text-sm">等待数据...</div>
       )}
 
       {/* Footer */}
-      <div className="px-5 py-2.5 border-t border-[var(--border-clr)] flex justify-between text-[11px] text-text-dim">
+      <div className="px-5 py-2.5 border-t border-border flex justify-between text-[11px] text-text-dim">
         <span>🕐 {server.uptime_fmt || '--'}</span>
         <span>{host ? `${host.platform} ${host.platform_version} · ${host.arch}` : ''}</span>
         <span>{ip_country ? `📍 ${ip_country}` : ''}</span>
@@ -125,7 +125,7 @@ function MetricBlock({
   pct: number;
 }) {
   return (
-    <div className="bg-[var(--bg)] rounded-lg px-3.5 py-3 text-center">
+    <div className="bg-bg rounded-lg px-3.5 py-3 text-center">
       <div className="text-[10px] text-text-dim uppercase tracking-wider mb-1.5">{label}</div>
       <div className="text-xl font-bold tabular-nums" style={{ color: color || undefined }}>
         {value}
