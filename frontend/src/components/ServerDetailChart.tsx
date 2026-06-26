@@ -27,11 +27,11 @@ export default function ServerDetailChart({ server, history }: Props) {
   return (
     <div className="space-y-3">
       <ChartCard title="CPU 使用率 (%)" dataKey="cpu" color="#22C55E" domain={[0, 100]} data={data} />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         <MultiChart title="内存 / Swap (%)" keys={['mem', 'swap']} colors={['#EAB308', '#EF4444']} domain={[0, 100]} data={data} />
         <ChartCard title="磁盘使用率 (%)" dataKey="disk" color="#3B82F6" domain={[0, 100]} data={data} />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         <ChartCard title="网络上行 (KB/s)" dataKey="netOut" color="#A855F7" data={data} />
         <ChartCard title="网络下行 (KB/s)" dataKey="netIn" color="#60A5FA" data={data} />
       </div>
@@ -45,7 +45,7 @@ function ChartCard({ title, data, dataKey, color, domain }: {
   return (
     <div className="rounded-lg bg-card ring-1 ring-border p-3">
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
-      <ResponsiveContainer width="100%" height={130}>
+      <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} syncId="detailCharts">
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
           <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#A8A29E' }} interval="preserveStartEnd" />
@@ -64,7 +64,7 @@ function MultiChart({ title, keys, colors, domain, data }: {
   return (
     <div className="rounded-lg bg-card ring-1 ring-border p-3">
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
-      <ResponsiveContainer width="100%" height={130}>
+      <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} syncId="detailCharts">
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
           <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#A8A29E' }} interval="preserveStartEnd" />

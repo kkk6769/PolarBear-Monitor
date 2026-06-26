@@ -48,7 +48,7 @@ export default function ServerDetail() {
           {server.online && server.uptime_fmt && (
             <InfoItem label="运行时间" value={server.uptime_fmt} />
           )}
-          {h?.version && <InfoItem label="Agent" value={h.version} />}
+          {h?.version && h.version !== 'dev' && <InfoItem label="Agent" value={h.version} />}
           {h?.arch && <InfoItem label="架构" value={h.arch} />}
           {h?.mem_total ? <InfoItem label="内存总量" value={formatBytes(h.mem_total)} /> : null}
           {h?.disk_total ? <InfoItem label="磁盘总量" value={formatBytes(h.disk_total)} /> : null}
