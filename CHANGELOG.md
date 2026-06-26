@@ -27,8 +27,6 @@
 - **模块化 i18n 多语言**：右上角语言切换（中/EN），翻译文件独立可扩展
   - `frontend/src/i18n/` 结构：`types.ts` → `zh.ts` / `en.ts` → `index.tsx` (Context)
   - 添加新语言仅需新建一个翻译文件
-  - 国家名通过 `Intl.DisplayNames` 自动跟随 UI 语言
-  - 运行时间格式跟随语言（中文：3天 12小时 / English：3d 12h）
 - **安装脚本**：`install.sh` 新增选项 9 — 更新 Agent（保留配置、失败回滚）
 
 ### 修复
