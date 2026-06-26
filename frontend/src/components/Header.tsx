@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wifi, WifiOff, Settings, Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
@@ -12,7 +12,6 @@ interface Props {
 export default function Header({ onlineCount, totalCount, connected }: Props) {
   const { theme, toggle } = useTheme();
   const [timeStr, setTimeStr] = useState('');
-  const tickRef = useRef<Record<number, number>>({});
 
   useEffect(() => {
     const tick = () => {
@@ -24,15 +23,6 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
   }, []);
 
   const chars = [...timeStr];
-  const prev = useRef<string[]>([]);
-
-  // bump version for positions where char changed
-  chars.forEach((ch, i) => {
-    if (prev.current[i] !== ch) {
-      tickRef.current[i] = (tickRef.current[i] || 0) + 1;
-    }
-  });
-  prev.current = chars;
 
   return (
     <header className="mx-auto w-full max-w-5xl px-4 pt-6">
@@ -77,10 +67,10 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
         <div className="flex items-baseline gap-1.5 mt-1">
           <span className="text-sm font-medium text-muted-foreground">当前时间</span>
           <span className="text-sm font-semibold text-foreground tabular-nums">
-            {chars.map((ch, i) => (
-              <AnimatePresence key={i} mode="popLayout">
+            <AnimatePresence mode="popLayout">
+              {chars.map((ch, i) => (
                 <motion.span
-                  key={`${i}-${tickRef.current[i] || 0}`}
+                  key={`${i}-${ch}`}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
@@ -89,8 +79,8 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
                 >
                   {ch}
                 </motion.span>
-              </AnimatePresence>
-            ))}
+              ))}
+            </AnimatePresence>
           </span>
         </div>
       </div>
