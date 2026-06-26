@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { Wifi, WifiOff, Settings } from 'lucide-react';
+import { Wifi, WifiOff, Settings, Sun, Moon } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
 
 interface Props {
   onlineCount: number;
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export default function Header({ onlineCount, totalCount, connected }: Props) {
+  const { theme, toggle } = useTheme();
   const now = new Date().toLocaleTimeString('zh-CN', { hour12: false });
   const hours = now.split(':')[0];
   const minutes = now.split(':')[1];
@@ -42,6 +44,7 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
 
           <span className="hidden h-4 w-px bg-border md:block" />
 
+          <button onClick={toggle} className="rounded-full px-[9px] bg-card text-muted-foreground hover:text-foreground transition-colors">{theme === "dark" ? <Sun size={13} /> : <Moon size={13} />}</button>
           <span className="flex items-center gap-1 text-muted-foreground text-xs">
             {connected ? <Wifi size={12} className="text-green-500" /> : <WifiOff size={12} className="text-red-500" />}
           </span>
