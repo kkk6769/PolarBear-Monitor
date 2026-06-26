@@ -59,10 +59,8 @@ export default function ServerDetail() {
           {h?.platform && <InfoItem label="系统" value={`${h.platform} ${h.platform_version || ''}`} />}
           {h?.cpu && h.cpu.length > 0 && <InfoItem label="CPU" value={h.cpu[0]} />}
         </div>
-        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-2">
-          {s && <InfoItem label="负载" value={`${server.load1} / ${server.load5} / ${server.load15}`} />}
-        </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-4">
+          {s && <InfoItem label="负载" value={`${server.load1} / ${server.load5} / ${server.load15}`} />}
           {s && <InfoItem label="上传" value={s.net_out_transfer ? formatBytes(s.net_out_transfer) : '--'} />}
           {s && <InfoItem label="下载" value={s.net_in_transfer ? formatBytes(s.net_in_transfer) : '--'} />}
         </div>
