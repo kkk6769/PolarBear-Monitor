@@ -46,7 +46,7 @@ function ChartCard({ title, data, dataKey, color, domain }: {
     <div className="rounded-lg bg-card ring-1 ring-border p-3">
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
       <ResponsiveContainer width="100%" height={120}>
-        <AreaChart data={data} syncId="detailCharts">
+        <AreaChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
           <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#A8A29E' }} interval="preserveStartEnd" />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain || ['auto', 'auto']} />
@@ -65,7 +65,7 @@ function MultiChart({ title, keys, colors, domain, data }: {
     <div className="rounded-lg bg-card ring-1 ring-border p-3">
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
       <ResponsiveContainer width="100%" height={120}>
-        <AreaChart data={data} syncId="detailCharts">
+        <AreaChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
           <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#A8A29E' }} interval="preserveStartEnd" />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain} />
