@@ -30,9 +30,9 @@ export default function ServerCard({ server }: Props) {
         <div className="grid grid-cols-5 items-center gap-4 px-4 pb-4 md:px-6 md:pb-5">
           <div className="flex-1 text-center"><div className="text-xs text-muted-foreground">CPU</div><div className="text-sm font-semibold">{server.cpu_percent||'--'}</div><div className="mt-1.5 h-1.5 w-full rounded-full bg-muted overflow-hidden"><div className="h-full rounded-full bg-green-500 transition-all duration-500" style={{width: Math.min(cpu,100)+'%'}} /></div></div>
           <div className="flex-1 text-center"><div className="text-xs text-muted-foreground">MEM</div><div className="text-sm font-semibold">{server.mem_used_fmt||'--'}</div><div className="mt-1.5 h-1.5 w-full rounded-full bg-muted overflow-hidden"><div className="h-full rounded-full bg-yellow-500 transition-all duration-500" style={{width: mp+'%'}} /></div></div>
-          <div className="flex-1 text-center"><div className="text-xs text-muted-foreground">DSK</div><div className="text-sm font-semibold">{server.disk_used_fmt||'--'}</div><div className="mt-1.5 h-1.5 w-full rounded-full bg-muted overflow-hidden"><div className="h-full rounded-full bg-blue-500 transition-all duration-500" style={{width: dp+'%'}} /></div></div>
+          <div className="flex-1 text-center"><div className="text-xs text-muted-foreground">Disk</div><div className="text-sm font-semibold">{server.disk_used_fmt||'--'}</div><div className="mt-1.5 h-1.5 w-full rounded-full bg-muted overflow-hidden"><div className="h-full rounded-full bg-blue-500 transition-all duration-500" style={{width: dp+'%'}} /></div></div>
           <div className="flex-1 text-center"><div className="text-xs text-muted-foreground">↑ UP</div><div className="text-xs font-semibold">{server.net_out_speed_fmt||'--'}</div></div>
-          <div className="flex-1 text-center"><div className="text-xs text-muted-foreground">↓ DN</div><div className="text-xs font-semibold">{server.net_in_speed_fmt||'--'}</div></div>
+          <div className="flex-1 text-center"><div className="text-xs text-muted-foreground">↓ Down</div><div className="text-xs font-semibold">{server.net_in_speed_fmt||'--'}</div></div>
         </div>
       ) : (
         <div className="px-3 pb-3 md:px-5 md:pb-5 text-center text-muted-foreground text-xs">Waiting...</div>
