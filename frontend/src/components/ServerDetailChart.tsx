@@ -26,13 +26,13 @@ function buildData(history: WSMessage[], serverId: number, host: ServerDisplay['
 export default function ServerDetailChart({ server, history }: Props) {
   const { t } = useT();
   const [data, setData] = useState<DataPoint[]>([]);
-  const tickRef = useRef(0);
+  const lastUpdateRef = useRef(0);
 
   useEffect(() => {
-    tickRef.current++;
-    if (tickRef.current % 1 === 0) {
-      setData(buildData(history, server.id, server.host));
-    }
+    const now = Date.now();
+    if (now - lastUpdateRef.current < 1000) return;
+    lastUpdateRef.current = now;
+    setData(buildData(history, server.id, server.host));
   }, [history, server.id, server.host]);
 
   if (data.length < 2) return <div className="text-center text-muted-foreground text-sm py-12">{t['detail.collecting']}</div>;
