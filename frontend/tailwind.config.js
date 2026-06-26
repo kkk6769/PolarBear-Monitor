@@ -5,13 +5,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#f5f5f7',
-        foreground: '#1a1a21',
-        card: '#ffffff',
-        'card-foreground': '#1a1a21',
-        muted: '#f0f0f3',
-        'muted-foreground': '#6e6e78',
-        border: '#e0e0e5',
+        background: 'var(--bg)',
+        foreground: 'var(--fg)',
+        card: 'var(--card)',
+        'card-foreground': 'var(--card-fg)',
+        muted: 'var(--muted)',
+        'muted-foreground': 'var(--muted-fg)',
+        border: 'var(--border)',
         ring: '#00D4FF',
       },
       borderRadius: { lg: '0.5rem' },
