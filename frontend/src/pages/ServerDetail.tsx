@@ -2,7 +2,6 @@ import { useParams, Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useWS } from '../hooks/use-ws';
-import type { ServerDisplay } from '../types/polarbear';
 import ServerDetailChart from '../components/ServerDetailChart';
 
 export default function ServerDetail() {
