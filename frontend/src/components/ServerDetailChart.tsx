@@ -7,20 +7,23 @@ interface Props { server: ServerDisplay; history: WSMessage[]; }
 interface DataPoint { idx: number; time: string; cpu: number; mem: number; swap: number; disk: number; netIn: number; netOut: number; }
 
 function buildData(history: WSMessage[], serverId: number, host: ServerDisplay['host']): DataPoint[] {
-  return history.slice(-60).map((msg, idx) => {
-    const s = msg.data?.find(d => d.id === serverId);
-    if (!s || !s.state) return null;
-    return {
-      idx,
-      time: new Date(msg.now * 1000).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-      cpu: parseFloat(s.cpu_percent) || 0,
-      mem: s.mem_percent || 0,
-      swap: s.state.swap_used ? (s.state.swap_used / (host?.swap_total || 1)) * 100 : 0,
-      disk: s.disk_percent || 0,
-      netIn: s.state.net_in_speed / 1024,
-      netOut: s.state.net_out_speed / 1024,
-    };
-  }).filter(Boolean) as DataPoint[];
+  const cutoff = Date.now() / 1000 - 60; // last 60 seconds
+  return history
+    .filter(msg => msg.now >= cutoff)
+    .map((msg, idx) => {
+      const s = msg.data?.find(d => d.id === serverId);
+      if (!s || !s.state) return null;
+      return {
+        idx,
+        time: new Date(msg.now * 1000).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        cpu: parseFloat(s.cpu_percent) || 0,
+        mem: s.mem_percent || 0,
+        swap: s.state.swap_used ? (s.state.swap_used / (host?.swap_total || 1)) * 100 : 0,
+        disk: s.disk_percent || 0,
+        netIn: s.state.net_in_speed / 1024,
+        netOut: s.state.net_out_speed / 1024,
+      };
+    }).filter(Boolean) as DataPoint[];
 }
 
 export default function ServerDetailChart({ server, history }: Props) {

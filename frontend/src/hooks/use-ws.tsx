@@ -32,7 +32,7 @@ export function WSProvider({ children }: { children: React.ReactNode }) {
         setServers(msg.data || []);
         setHistory(prev => {
           const next = [...prev, msg];
-          return next.length > 60 ? next.slice(-60) : next;
+          return next.length > 300 ? next.slice(-300) : next;
         });
       } catch { /* ignore */ }
     };
