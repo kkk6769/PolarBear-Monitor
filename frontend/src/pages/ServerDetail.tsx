@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useWS } from '../hooks/use-ws';
 import { useT } from '../i18n';
 import { getLocalizedCountry } from '../lib/country';
+import { formatUptime } from '../lib/format';
 import Header from '../components/Header';
 import ServerDetailChart from '../components/ServerDetailChart';
 
@@ -50,7 +51,7 @@ export default function ServerDetail() {
 
         {/* Inline info items */}
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs mb-2">
-          {server.online && server.uptime_fmt && <InfoItem label={t['detail.uptime']} value={server.uptime_fmt} />}
+          {server.online && s && <InfoItem label={t['detail.uptime']} value={formatUptime(s.uptime, { d: t['time.day'], h: t['time.hour'], m: t['time.min'], s: t['time.sec'] })} />}
           {h?.arch && <InfoItem label={t['detail.arch']} value={h.arch} />}
           {h?.mem_total ? <InfoItem label={t['detail.memTotal']} value={formatBytes(h.mem_total)} /> : null}
           {h?.disk_total ? <InfoItem label={t['detail.diskTotal']} value={formatBytes(h.disk_total)} /> : null}

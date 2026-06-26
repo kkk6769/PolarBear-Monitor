@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import type { ServerDisplay } from '../types/polarbear';
 import { useT } from '../i18n';
 import { getLocalizedCountry } from '../lib/country';
+import { formatUptime } from '../lib/format';
 
 interface Props { server: ServerDisplay; }
 
@@ -11,6 +12,7 @@ export default function ServerCard({ server }: Props) {
   const cpu = parseFloat(server.cpu_percent) || 0;
   const mp = server.mem_percent || 0;
   const dp = server.disk_percent || 0;
+  const uptimeStr = state?.uptime != null ? formatUptime(state.uptime, { d: t['time.day'], h: t['time.hour'], m: t['time.min'], s: t['time.sec'] }) : null;
 
   return (
     <motion.div
@@ -41,7 +43,7 @@ export default function ServerCard({ server }: Props) {
         <div className="px-3 pb-3 md:px-5 md:pb-5 text-center text-muted-foreground text-xs">{t['card.waiting']}</div>
       )}
       <div className="px-3 pb-2 md:px-5 md:pb-3 flex justify-between text-[10px] text-muted-foreground opacity-60">
-        <span>{t['card.uptime']} {server.uptime_fmt||t['card.na']}</span>
+        <span>{t['card.uptime']} {uptimeStr||t['card.na']}</span>
         <span className="truncate mx-2">{host ? host.platform + ' ' + host.platform_version : ''}</span>
         <span>{ip_code ? `📍 ${getLocalizedCountry(ip_code, lang)}` : ''}</span>
       </div>

@@ -10,11 +10,12 @@ export function formatBytesPerSec(b: number): string {
   return formatBytes(b) + '/s';
 }
 
-export function formatUptime(sec: number): string {
-  if (sec < 60) return sec + 's';
-  if (sec < 3600) return Math.floor(sec / 60) + 'm';
+export function formatUptime(sec: number, units?: { d?: string; h?: string; m?: string; s?: string }): string {
+  const u = { d: 'd', h: 'h', m: 'm', s: 's', ...units };
+  if (sec < 60) return sec + u.s;
+  if (sec < 3600) return Math.floor(sec / 60) + u.m;
   const days = Math.floor(sec / 86400);
   const hours = Math.floor((sec % 86400) / 3600);
-  if (days > 0) return days + 'd ' + hours + 'h';
-  return Math.floor(sec / 3600) + 'h ' + Math.floor((sec % 3600) / 60) + 'm';
+  if (days > 0) return days + u.d + ' ' + hours + u.h;
+  return Math.floor(sec / 3600) + u.h + ' ' + Math.floor((sec % 3600) / 60) + u.m;
 }
