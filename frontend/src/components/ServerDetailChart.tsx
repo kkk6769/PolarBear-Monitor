@@ -28,7 +28,7 @@ export default function ServerDetailChart({ server, history }: Props) {
   useEffect(() => {
     tickRef.current++;
     // Only update chart data every 5 ticks to prevent tooltip reset
-    if (tickRef.current % 5 === 0) {
+    if (tickRef.current % 1 === 0) {
       setData(buildData(history, server.id, server.host));
     }
   }, [history, server.id, server.host]);
