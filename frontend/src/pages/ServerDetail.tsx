@@ -65,9 +65,7 @@ function ServerInfoGrid({ server }: { server: ServerDisplay }) {
       <InfoCard label="网络 ↓" value={s ? server.net_in_speed_fmt : '--'} />
       <InfoCard label="负载" value={s ? `${s.load1} / ${s.load5} / ${s.load15}` : '--'} />
       <InfoCard label="磁盘读" value={s ? server.disk_read_speed_fmt : '--'} />
-      <InfoCard label="磁盘写" value={s ? server.disk_write_speed_fmt : '--'} />
-      <InfoCard label="IP" value={server.ip || '--'} />
-    </div>
+      <InfoCard label="磁盘写" value={s ? server.disk_write_speed_fmt : '--'} />    </div>
   );
 }
 

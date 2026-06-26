@@ -15,19 +15,21 @@ type ServerDisplay struct {
 	Host         *Host      `json:"host,omitempty"`
 	State        *HostState `json:"state,omitempty"`
 	// Human-readable formatted values for the frontend
-	CPUPercent    string `json:"cpu_percent"`
-	MemUsedFmt    string `json:"mem_used_fmt"`
-	MemTotalFmt   string `json:"mem_total_fmt"`
-	MemPercent    int    `json:"mem_percent"`
-	DiskUsedFmt   string `json:"disk_used_fmt"`
-	DiskTotalFmt  string `json:"disk_total_fmt"`
-	DiskPercent   int    `json:"disk_percent"`
-	NetInSpeedFmt string `json:"net_in_speed_fmt"`
-	NetOutSpeedFmt string `json:"net_out_speed_fmt"`
-	UptimeFmt     string `json:"uptime_fmt"`
-	Load1         string `json:"load1"`
-	Load5         string `json:"load5"`
-	Load15        string `json:"load15"`
+	CPUPercent        string `json:"cpu_percent"`
+	MemUsedFmt        string `json:"mem_used_fmt"`
+	MemTotalFmt       string `json:"mem_total_fmt"`
+	MemPercent        int    `json:"mem_percent"`
+	DiskUsedFmt       string `json:"disk_used_fmt"`
+	DiskTotalFmt      string `json:"disk_total_fmt"`
+	DiskPercent       int    `json:"disk_percent"`
+	NetInSpeedFmt     string `json:"net_in_speed_fmt"`
+	NetOutSpeedFmt    string `json:"net_out_speed_fmt"`
+	DiskReadSpeedFmt  string `json:"disk_read_speed_fmt"`
+	DiskWriteSpeedFmt string `json:"disk_write_speed_fmt"`
+	UptimeFmt         string `json:"uptime_fmt"`
+	Load1             string `json:"load1"`
+	Load5             string `json:"load5"`
+	Load15            string `json:"load15"`
 }
 
 // ServerUpdateForm 前端更新服务器名/排序的请求

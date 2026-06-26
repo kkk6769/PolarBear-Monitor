@@ -670,10 +670,12 @@ func svrToDisplay(svr *model.Server) model.ServerDisplay {
 		d.DiskTotalFmt = model.FormatBytes(hostField(svr, "disk_total"))
 		d.NetInSpeedFmt = model.FormatBytesPerSec(s.NetInSpeed)
 		d.NetOutSpeedFmt = model.FormatBytesPerSec(s.NetOutSpeed)
+		d.DiskReadSpeedFmt = model.FormatBytesPerSec(s.DiskReadSpeed)
+		d.DiskWriteSpeedFmt = model.FormatBytesPerSec(s.DiskWriteSpeed)
 		d.UptimeFmt = model.FormatUptime(s.Uptime)
-		d.Load1 = fmt.Sprintf("%.2f", s.Load1)
-		d.Load5 = fmt.Sprintf("%.2f", s.Load5)
-		d.Load15 = fmt.Sprintf("%.2f", s.Load15)
+		d.Load1 = fmt.Sprintf("%.1f", s.Load1)
+		d.Load5 = fmt.Sprintf("%.1f", s.Load5)
+		d.Load15 = fmt.Sprintf("%.1f", s.Load15)
 		// percentages
 		if memTotal := hostField(svr, "mem_total"); memTotal > 0 {
 			d.MemPercent = int(float64(s.MemUsed) / float64(memTotal) * 100)
