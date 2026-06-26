@@ -3,7 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import type { ServerDisplay, WSMessage } from '../types/polarbear';
 
 interface Props { server: ServerDisplay; history: WSMessage[]; }
-interface DataPoint { idx: number; cpu: number; mem: number; swap: number; disk: number; netIn: number; netOut: number; }
+interface DataPoint { idx: number; time: string; cpu: number; mem: number; swap: number; disk: number; netIn: number; netOut: number; }
 
 function buildData(history: WSMessage[], serverId: number, host: ServerDisplay['host']): DataPoint[] {
   return history.slice(-60).map((msg, idx) => {
@@ -11,6 +11,7 @@ function buildData(history: WSMessage[], serverId: number, host: ServerDisplay['
     if (!s || !s.state) return null;
     return {
       idx,
+      time: new Date(msg.now * 1000).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       cpu: parseFloat(s.cpu_percent) || 0,
       mem: s.mem_percent || 0,
       swap: s.state.swap_used ? (s.state.swap_used / (host?.swap_total || 1)) * 100 : 0,
@@ -27,7 +28,6 @@ export default function ServerDetailChart({ server, history }: Props) {
 
   useEffect(() => {
     tickRef.current++;
-    // Only update chart data every 5 ticks to prevent tooltip reset
     if (tickRef.current % 1 === 0) {
       setData(buildData(history, server.id, server.host));
     }
@@ -61,7 +61,11 @@ function ChartCard({ title, data, dataKey, color, domain }: {
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
           <XAxis dataKey="idx" hide />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain || ['auto', 'auto']} />
-          <Tooltip cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }} contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }} />
+          <Tooltip
+            cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }}
+            contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
+            labelFormatter={(idx: number, payload: any[]) => payload?.[0]?.payload?.time || ''}
+          />
           <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
         </AreaChart>
       </ResponsiveContainer>
@@ -80,7 +84,11 @@ function MultiChart({ title, keys, colors, domain, data }: {
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
           <XAxis dataKey="idx" hide />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain} />
-          <Tooltip cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }} contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }} />
+          <Tooltip
+            cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }}
+            contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
+            labelFormatter={(idx: number, payload: any[]) => payload?.[0]?.payload?.time || ''}
+          />
           {keys.map((k, i) => (
             <Area key={k} type="monotone" dataKey={k} stroke={colors[i]} fill={colors[i]} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
           ))}
