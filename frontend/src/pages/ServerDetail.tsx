@@ -22,10 +22,14 @@ export default function ServerDetail() {
     );
   }
 
+  const h = server.host;
+  const s = server.state;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto w-full max-w-5xl px-4 py-6">
-        <div className="flex items-center gap-3 mb-6">
+        {/* Back + Name + Status */}
+        <div className="flex items-center gap-3 mb-4">
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft size={20} />
           </Link>
@@ -40,40 +44,61 @@ export default function ServerDetail() {
           </span>
         </div>
 
-        <ServerInfoGrid server={server} />
-
-        <div className="mt-6">
-          <ServerDetailChart server={server} history={history} />
+        {/* Inline info items */}
+        <div className="flex flex-wrap gap-x-6 gap-y-2 mb-6">
+          {server.online && server.uptime_fmt && (
+            <InfoItem label="运行时间" value={server.uptime_fmt} />
+          )}
+          {h?.version && <InfoItem label="Agent" value={h.version} />}
+          {h?.arch && <InfoItem label="架构" value={h.arch} />}
+          {h?.mem_total ? <InfoItem label="内存总量" value={formatBytes(h.mem_total)} /> : null}
+          {h?.disk_total ? <InfoItem label="磁盘总量" value={formatBytes(h.disk_total)} /> : null}
+          {h?.swap_total ? <InfoItem label="Swap" value={formatBytes(h.swap_total)} /> : null}
+          {h?.platform && (
+            <InfoItem label="系统" value={`${h.platform} ${h.platform_version || ''}`} />
+          )}
+          {h?.cpu && h.cpu.length > 0 && <InfoItem label="CPU" value={h.cpu[0]} />}
+          {server.ip_country && (
+            <InfoItem label="地区" value={
+              <span className="flex items-center gap-1">
+                {server.ip_code ? <img src={`https://flagcdn.com/24x18/${server.ip_code.toLowerCase()}.png`} className="w-[16px] h-[11px] rounded-sm" alt="" /> : null}
+                {server.ip_country}
+              </span>
+            } />
+          )}
+          {s && server.load1 !== '0.0' && (
+            <InfoItem label="负载" value={`${server.load1} / ${server.load5} / ${server.load15}`} />
+          )}
+          {s && <InfoItem label="网络 ↑" value={server.net_out_speed_fmt || '--'} />}
+          {s && <InfoItem label="网络 ↓" value={server.net_in_speed_fmt || '--'} />}
+          {s && server.disk_read_speed_fmt && (
+            <InfoItem label="磁盘读" value={server.disk_read_speed_fmt} />
+          )}
+          {s && server.disk_write_speed_fmt && (
+            <InfoItem label="磁盘写" value={server.disk_write_speed_fmt} />
+          )}
         </div>
+
+        {/* Charts */}
+        <ServerDetailChart server={server} history={history} />
       </div>
     </div>
   );
 }
 
-function ServerInfoGrid({ server }: { server: ServerDisplay }) {
-  const h = server.host;
-  const s = server.state;
+function InfoItem({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      <InfoCard label="运行时间" value={server.uptime_fmt || '--'} />
-      <InfoCard label="系统" value={h ? `${h.platform} ${h.platform_version}` : '--'} />
-      <InfoCard label="CPU" value={h?.cpu?.[0] || '--'} />
-      <InfoCard label="架构" value={h?.arch || '--'} />
-      <InfoCard label="内存" value={s ? `${server.mem_used_fmt} / ${server.mem_total_fmt}` : '--'} />
-      <InfoCard label="磁盘" value={s ? `${server.disk_used_fmt} / ${server.disk_total_fmt}` : '--'} />
-      <InfoCard label="网络 ↑" value={s ? server.net_out_speed_fmt : '--'} />
-      <InfoCard label="网络 ↓" value={s ? server.net_in_speed_fmt : '--'} />
-      <InfoCard label="负载" value={server.load1 && server.load1 !== '0.0' ? `${server.load1} / ${server.load5} / ${server.load15}` : '--'} />
-      <InfoCard label="磁盘读" value={s ? server.disk_read_speed_fmt : '--'} />
-      <InfoCard label="磁盘写" value={s ? server.disk_write_speed_fmt : '--'} />    </div>
+    <div className="flex flex-col items-start gap-0.5">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <div className="text-xs">{value}</div>
+    </div>
   );
 }
 
-function InfoCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg bg-card ring-1 ring-border p-3">
-      <div className="text-[10px] text-muted-foreground mb-0.5">{label}</div>
-      <div className="text-xs font-medium truncate">{value}</div>
-    </div>
-  );
+function formatBytes(b: number): string {
+  if (b === 0) return '0 B';
+  const k = 1024;
+  const u = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(b) / Math.log(k));
+  return parseFloat((b / Math.pow(k, i)).toFixed(1)) + ' ' + u[i];
 }
