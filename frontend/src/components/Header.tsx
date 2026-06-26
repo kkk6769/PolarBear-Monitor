@@ -8,10 +8,15 @@ interface Props {
 }
 
 export default function Header({ onlineCount, totalCount, connected }: Props) {
+  const now = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+  const hours = now.split(':')[0];
+  const minutes = now.split(':')[1];
+
   return (
-    <header className="sticky top-0 z-50 bg-surface/80 backdrop-blur border-b border-border">
-      <div className="max-w-[1440px] mx-auto px-6 py-3.5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+    <header className="mx-auto w-full max-w-5xl px-4 pt-6">
+      {/* Top bar */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <motion.span
             className="text-2xl"
             animate={{ rotate: connected ? [0, -10, 10, 0] : 0 }}
@@ -19,37 +24,38 @@ export default function Header({ onlineCount, totalCount, connected }: Props) {
           >
             🐻‍❄️
           </motion.span>
-          <h1 className="text-lg font-bold text-text tracking-tight">PolarBear Monitor</h1>
+          <span className="sm:text-base text-sm font-medium text-foreground">PolarBear Monitor</span>
         </div>
 
-        <nav className="flex items-center gap-5 text-sm">
-          <span className="flex items-center gap-1.5 text-text-dim">
-            {connected ? (
-              <Wifi size={14} className="text-green" />
-            ) : (
-              <WifiOff size={14} className="text-red" />
-            )}
-            {connected ? '已连接' : '重连中'}
-          </span>
-
-          <span className="flex items-center gap-1.5">
-            <span className={`inline-block w-2 h-2 rounded-full ${onlineCount > 0 ? 'bg-green shadow-[0_0_6px_var(--color-green)]' : 'bg-red'}`} />
-            <span className="text-text-dim">{onlineCount}</span>
-            <span className="text-text-dim/50">/ {totalCount} 在线</span>
-          </span>
-
-          <a
-            href="/admin"
-            className="flex items-center gap-1 text-text-dim hover:text-accent transition-colors no-underline"
-          >
+        <div className="flex items-center gap-3 text-sm">
+          <a href="/admin" className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors no-underline">
             <Settings size={14} />
-            管理后台
+            <span className="hidden sm:inline">管理</span>
           </a>
 
-          <span className="text-text-dim tabular-nums">
-            {new Date().toLocaleTimeString('zh-CN', { hour12: false })}
+          <span className="hidden h-4 w-px bg-border md:block" />
+
+          <span className="rounded-full px-[9px] bg-card text-xs font-medium flex items-center gap-1.5">
+            <span className={`inline-block h-2 w-2 rounded-full ${onlineCount > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
+            {onlineCount} / {totalCount}
           </span>
-        </nav>
+
+          <span className="hidden h-4 w-px bg-border md:block" />
+
+          <span className="flex items-center gap-1 text-muted-foreground text-xs">
+            {connected ? <Wifi size={12} className="text-green-500" /> : <WifiOff size={12} className="text-red-500" />}
+          </span>
+        </div>
+      </div>
+
+      {/* Greeting line */}
+      <div className="mt-10 md:mt-16">
+        <p className="text-base font-semibold">👋 你好</p>
+        <div className="flex items-baseline gap-1">
+          <span className="text-sm font-medium opacity-50 tabular-nums w-[21px]">{hours}</span>
+          <span className="mb-px font-medium text-sm opacity-50">:</span>
+          <span className="text-sm font-medium opacity-50 tabular-nums w-[21px]">{minutes}</span>
+        </div>
       </div>
     </header>
   );

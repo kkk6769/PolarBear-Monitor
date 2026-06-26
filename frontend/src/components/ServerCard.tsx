@@ -1,9 +1,7 @@
 import { motion } from 'framer-motion';
 import type { ServerDisplay } from '../types/polarbear';
 
-interface Props {
-  server: ServerDisplay;
-}
+interface Props { server: ServerDisplay; }
 
 export default function ServerCard({ server }: Props) {
   const { online, name, state, host, ip_code, ip_country } = server;
@@ -16,129 +14,34 @@ export default function ServerCard({ server }: Props) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`rounded-xl border bg-surface/70 backdrop-blur overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-lg ${!online ? 'opacity-60' : ''}`}
+      className={`rounded-lg bg-card shadow-md ring-1 ring-border transition-all hover:shadow-sm hover:ring-muted-foreground/30 ${!online ? 'opacity-60' : ''}`}
     >
-      {/* Header */}
-      <div className="px-5 py-4 flex items-center justify-between border-b border-border">
-        <div className="flex items-center gap-2.5 font-semibold text-sm">
-          {ip_code ? (
-            <img
-              src={`https://flagcdn.com/24x18/${ip_code.toLowerCase()}.png`}
-              className="w-[18px] h-[14px] rounded-sm align-middle"
-              alt=""
-            />
-          ) : (
-            <span className="text-base">🖥️</span>
-          )}
-          <span className="text-text truncate max-w-[200px]">{name}</span>
-        </div>
-        <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-            online ? 'bg-green/10 text-green' : 'bg-red/10 text-red'
-          }`}
-        >
-          {online && (
-            <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-          )}
-          {online ? '在线' : '离线'}
+      <div className="flex items-center gap-3 p-3 md:px-5">
+        <span className={`relative inline-flex h-2 w-2 shrink-0 rounded-full ${online ? 'bg-green-500' : 'bg-red-500'}`}>
+          {online && <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-green-500 opacity-75" />}
         </span>
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          {ip_code ? <img src={`https://flagcdn.com/24x18/${ip_code.toLowerCase()}.png`} className="w-[17px] h-[12px] rounded-sm shrink-0" alt="" /> : null}
+          <span className="break-normal font-bold tracking-tight truncate text-xs">{name}</span>
+        </div>
+        <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${online ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>{online ? 'ON' : 'OFF'}</span>
       </div>
-
-      {/* Body */}
       {state ? (
-        <div className="px-5 py-4 space-y-3">
-          {/* Row 1: CPU + Memory */}
-          <div className="grid grid-cols-2 gap-3">
-            <MetricBlock
-              label="CPU"
-              value={server.cpu_percent || '--'}
-              color="var(--color-red)"
-              pct={Math.min(cpu, 100)}
-              sub={
-                <span className="text-[11px] text-text-dim">
-                  1m {server.load1} · 5m {server.load5} · 15m {server.load15}
-                </span>
-              }
-            />
-            <MetricBlock
-              label="内存"
-              value={server.mem_used_fmt || '--'}
-              sub={`/ ${server.mem_total_fmt || '--'}`}
-              color="var(--color-yellow)"
-              pct={mp}
-            />
-          </div>
-
-          {/* Row 2: Disk + Network */}
-          <div className="grid grid-cols-2 gap-3">
-            <MetricBlock
-              label="磁盘"
-              value={server.disk_used_fmt || '--'}
-              sub={
-                <span className="text-[11px] text-text-dim">
-                  读 {server.disk_read_speed_fmt || '--'} · 写 {server.disk_write_speed_fmt || '--'}
-                </span>
-              }
-              color="var(--color-accent)"
-              pct={dp}
-            />
-            <MetricBlock
-              label="网络"
-              value={
-                <span>
-                  <span className="text-[var(--color-green)]">↑ {server.net_out_speed_fmt || '--'}</span>
-                  {' · '}
-                  <span className="text-[var(--color-yellow)]">↓ {server.net_in_speed_fmt || '--'}</span>
-                </span>
-              }
-              sub={null}
-              color=""
-              pct={0}
-            />
-          </div>
+        <div className="grid grid-cols-5 items-center gap-3 px-3 pb-3 md:px-5 md:pb-5">
+          <div className="w-14 text-center"><div className="text-xs text-muted-foreground">CPU</div><div className="text-xs font-semibold">{server.cpu_percent||'--'}</div><div className="mt-1 h-1 w-full rounded-full bg-muted overflow-hidden"><div className="h-full rounded-full bg-green-500 transition-all duration-500" style={{width: Math.min(cpu,100)+'%'}} /></div></div>
+          <div className="w-14 text-center"><div className="text-xs text-muted-foreground">MEM</div><div className="text-xs font-semibold">{server.mem_used_fmt||'--'}</div><div className="mt-1 h-1 w-full rounded-full bg-muted overflow-hidden"><div className="h-full rounded-full bg-yellow-500 transition-all duration-500" style={{width: mp+'%'}} /></div></div>
+          <div className="w-14 text-center"><div className="text-xs text-muted-foreground">DSK</div><div className="text-xs font-semibold">{server.disk_used_fmt||'--'}</div><div className="mt-1 h-1 w-full rounded-full bg-muted overflow-hidden"><div className="h-full rounded-full bg-blue-500 transition-all duration-500" style={{width: dp+'%'}} /></div></div>
+          <div className="w-14 text-center"><div className="text-xs text-muted-foreground">UP</div><div className="text-[10.5px] font-semibold">{server.net_out_speed_fmt||'--'}</div></div>
+          <div className="w-14 text-center"><div className="text-xs text-muted-foreground">DN</div><div className="text-[10.5px] font-semibold">{server.net_in_speed_fmt||'--'}</div></div>
         </div>
       ) : (
-        <div className="px-5 py-8 text-center text-text-dim text-sm">等待数据...</div>
+        <div className="px-3 pb-3 md:px-5 md:pb-5 text-center text-muted-foreground text-xs">Waiting...</div>
       )}
-
-      {/* Footer */}
-      <div className="px-5 py-2.5 border-t border-border flex justify-between text-[11px] text-text-dim">
-        <span>🕐 {server.uptime_fmt || '--'}</span>
-        <span>{host ? `${host.platform} ${host.platform_version} · ${host.arch}` : ''}</span>
-        <span>{ip_country ? `📍 ${ip_country}` : ''}</span>
+      <div className="px-3 pb-2 md:px-5 md:pb-3 flex justify-between text-[10px] text-muted-foreground/60">
+        <span>U {server.uptime_fmt||'--'}</span>
+        <span className="truncate mx-2">{host ? host.platform + ' ' + host.platform_version : ''}</span>
+        <span>{ip_country || ''}</span>
       </div>
     </motion.div>
-  );
-}
-
-function MetricBlock({
-  label,
-  value,
-  sub,
-  color,
-  pct,
-}: {
-  label: string;
-  value: React.ReactNode;
-  sub: React.ReactNode;
-  color: string;
-  pct: number;
-}) {
-  return (
-    <div className="bg-bg rounded-lg px-3.5 py-3 text-center">
-      <div className="text-[10px] text-text-dim uppercase tracking-wider mb-1.5">{label}</div>
-      <div className="text-xl font-bold tabular-nums" style={{ color: color || undefined }}>
-        {value}
-      </div>
-      {sub && <div className="text-[11px] text-[var(--text-dim)] mt-1">{sub}</div>}
-      {pct > 0 && (
-        <div className="mt-2 h-1 bg-[var(--border-clr)] rounded-full overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${pct}%`, backgroundColor: color }}
-          />
-        </div>
-      )}
-    </div>
   );
 }

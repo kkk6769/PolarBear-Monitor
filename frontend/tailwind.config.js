@@ -4,15 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: '#0b0f19',
-        surface: '#141b2a',
-        border: '#1e2a3e',
-        text: '#c8d6e5',
-        'text-dim': '#6b7d95',
-        accent: '#4f8cff',
-        green: '#2ed573',
-        yellow: '#ffa502',
-        red: '#ff4757',
+        background: '#171412',
+        foreground: '#FAFAF8',
+        card: '#0A0A09',
+        'card-foreground': '#FAFAF8',
+        muted: '#292524',
+        'muted-foreground': '#A8A29E',
+        border: '#292524',
+        ring: '#44403C',
+      },
+      borderRadius: {
+        lg: '0.5rem',
       },
     },
   },
