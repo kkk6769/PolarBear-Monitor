@@ -5,7 +5,6 @@ import (
 	"log"
 	"math"
 	"runtime"
-	"sync"
 	"sync/atomic"
 	"time"
 
@@ -23,9 +22,7 @@ var (
 	Version string
 
 	netInSpeed, netOutSpeed, netInTransfer, netOutTransfer uint64
-	lastUpdateNetStats                                      uint64
-
-	stateLock sync.Mutex
+	lastUpdateNetStats                                     uint64
 )
 
 // GetHost 获取主机静态信息
