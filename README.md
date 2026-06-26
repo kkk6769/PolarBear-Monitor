@@ -4,6 +4,24 @@
 
 精简单向服务器监控系统。**Agent 只上报，Dashboard 只接收**——不对探针下发任何命令、不执行远程任务。
 
+## 特性
+
+- 🎨 **Nezha 风格 UI** — React + Tailwind 暖石深色主题，Framer Motion 动画
+- 📊 **实时折线图** — Recharts，CPU / 内存+Swap / 磁盘 / 网络上下行
+- 🖥️ **服务器详情页** — 点击卡片进入，含完整硬件信息 + 累计流量
+- 🌍 **IP 归属地** — 国旗图标 + 国家名称，7 天缓存
+- 🔐 **管理后台** — bcrypt 认证，排序/改名/备注/删除
+- 📦 **单文件部署** — Go `embed.FS` 打包前后端，一个二进制跑全部
+
+## 技术栈
+
+| 层 | 技术 |
+|------|------|
+| 后端 | Go 1.26, gRPC, GORM + SQLite |
+| 前端 | React 18, Vite 8, Tailwind CSS v3, Recharts, Framer Motion |
+| 通信 | gRPC (Agent→Dashboard), WebSocket (Dashboard→Browser) |
+| 认证 | bcrypt + HMAC-SHA256 Cookie |
+
 ## 架构
 
 ```
@@ -105,23 +123,16 @@ cd PolarBear-Monitor
 ## 编译
 
 ```bash
-# 全部平台
+# 1. 构建前端
+cd frontend && npm install && npm run build
+
+# 2. 编译 Go（全部平台）
 make build-all
 
 # 或单独编译
 make agent-linux-amd64    # Linux Agent
 make agent-windows-amd64  # Windows Agent
 make dashboard-linux-amd64 # Linux Dashboard
-```
-
-### 单个目标
-
-```bash
-make agent-linux-amd64
-make agent-linux-arm64
-make agent-windows-amd64
-make dashboard-linux-amd64
-make dashboard-linux-arm64
 ```
 
 产物输出至 `Run Folder (Build in there)/`，按平台分目录。

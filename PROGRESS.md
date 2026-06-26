@@ -1,10 +1,58 @@
 # PolarBear Monitor — 开发进度
 
-> 最后更新: 2026-06-24
+> 最后更新: 2026-06-26
 
 ---
 
-## 一、已完成功能
+## v1.7 (2026-06-26)
+
+### 前端
+
+| 功能 | 说明 |
+|------|------|
+| React SPA | Vite 8 + React 18 + TypeScript，替代纯 HTML |
+| Tailwind CSS v3 | PostCSS + `.mjs` 配置，Nezha 暖石深色主题 |
+| Framer Motion | 卡片入场动画、熊图标摇摆、脉冲在线指示灯 |
+| Recharts 图表 | AreaChart 实时折线图，1s 刷新，精准 Tooltip |
+| React Router | `/` 主页 + `/server/:id` 详情页 |
+| WSContext | WebSocket Context Provider，跨页面共享数据 |
+| ServerOverview | 顶部四卡片统计：Total / Online / Offline / Network |
+| ServerCard | Nezha 风格紧凑卡片：5 列指标 + 在线脉冲灯 + 国旗 |
+| ServerDetail | 详情页：Header + 信息行 + 折线图面板 |
+| Footer | 页脚：服务器计数 |
+| 响应式布局 | 移动端单列 → 桌面端双列卡片 |
+
+### 后端
+
+| 功能 | 说明 |
+|------|------|
+| 磁盘 IO 监控 | Agent `disk.IOCounters()` 汇总读写速率，差分计算 |
+| 负载格式化 | `fmt.Sprintf("%.1f")` 一位小数 |
+| 磁盘 IO API 字段 | `DiskReadSpeedFmt` / `DiskWriteSpeedFmt` |
+
+### Bug 修复
+
+| Bug | 修复 |
+|-----|------|
+| Agent 离线误判 | 双流竞态：UUID 匹配不再要求 Online=true，接收数据时恢复 Online |
+| 管理后台保存缓慢 | 串行 PATCH → `Promise.all()` 并发 + `_dirty` 脏标记 |
+| 图表 Tooltip 失效 | 移除 `syncId`、稳定 X 轴索引、节流 1s 渲染 |
+| 负载过多小数位 | `%.2f` → `%.1f`，详情页使用格式化字符串 |
+| 中文编码损坏 | PowerShell `Set-Content` → Python UTF-8 写入 |
+| Lint 警告 | 移除 `unused serverID` 和 `unused stateLock` |
+
+### 部署
+
+| 项目 | 说明 |
+|------|------|
+| GitHub 仓库 | https://github.com/kkk6769/PolarBear-Monitor |
+| 下载链接 | 全部迁移至 GitHub Raw |
+| 编译规范 | 强制清理 assets + Vite 缓存 + Go 缓存后重建 |
+| Favicon | 自托管 `frontend-dist/favicon.png` |
+
+---
+
+## v1.6 及之前
 
 ### Dashboard（面板）
 

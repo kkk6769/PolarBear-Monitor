@@ -7,16 +7,39 @@
 ## [Version---1.7]
 
 ### 新增
-- 
+- **React 前端重写**：Vite + React 18 + Tailwind CSS v3 替代纯 HTML
+  - Nezha 风格暖石深色主题（`#171412` 背景）
+  - Framer Motion 动画（卡片入场滑入、熊图标摇摆、脉冲在线灯）
+  - Recharts 实时折线图（CPU / 内存+Swap / 磁盘 / 网络上下行）
+  - Lucide React 图标库
+- **服务器详情页** (`/server/:id`)：点击卡片进入
+  - 顶部信息区：运行时间、架构、内存/磁盘总量、地区(国旗)、系统、CPU、负载、累计流量
+  - 折线图面板：CPU 全宽 + 内存/Swap 磁盘双列 + 网络双列
+  - Tooltip 显示精确到秒的上报时间
+- **统计概览卡片**：主页顶部 Total / Online / Offline / Network 四卡片
+- **WebSocket Context**：WSProvider 跨页面共享连接，详情页不重连
+- **磁盘 IO 监控**：Agent 采集 `disk.IOCounters()` 读写速率（差分计算）
+- **Favicon 自托管**：`frontend-dist/favicon.png`，不再依赖外部 URL
+- **编译规范**：强制清理 `frontend-dist/assets` + Vite 缓存 + Go 缓存后重建
 
 ### 修复
-- 
+- Agent 上报正常但 Dashboard 显示离线的 Bug（双流竞态 + 丢弃模式导致永久离线）
+- 管理后台保存等待过久（串行 PATCH 20 台 ~3s → `Promise.all()` 并发 ~0.1s）
+- 图表 Tooltip 鼠标交互失效（移除 `syncId`、稳定 X 轴、节流渲染）
+- 详情页负载显示过多小数位（Go `%.2f` → `%.1f`）
+- 前端中文编码损坏（PowerShell `Set-Content` 破坏 UTF-8，改用 Python 写入）
+- `unused parameter: serverID` lint 警告
+- `unused sync.Mutex stateLock` lint 警告
 
 ### 变更
-- 
+- 所有部署脚本下载地址从 `home.polarbear.wtf` 迁移至 GitHub Raw
+- README 中的一键部署命令同步更新
+- 管理后台 `saveAll()` 仅发送变更项 + `_dirty` 标记
+- `ReportSystemState` UUID 查找不再要求 `Online=true`，流到达即视为在线
+- 详情页不再显示 IP 地址
 
 ### 移除
-- 
+- 旧的纯 HTML/CSS 前端（`index.html` 和 `admin.html` 保留为管理后台）
 
 ---
 
