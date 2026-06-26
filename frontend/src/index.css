@@ -15,4 +15,13 @@
     --fg: #e8e8ed;
   }
   body { background: var(--bg); color: var(--fg); }
+
+  /* Dark mode card overrides */
+  .dark .bg-card { background-color: #2C2C34 !important; }
+  .dark .text-foreground { color: #e8e8ed !important; }
+  .dark .text-card-foreground { color: #e8e8ed !important; }
+  .dark .text-muted-foreground { color: #8e8e99 !important; }
+  .dark .border-border { border-color: #3a3a44 !important; }
+  .dark .ring-border { --tw-ring-color: #3a3a44 !important; }
+  .dark .bg-muted { background-color: #1e1e24 !important; }
 }
