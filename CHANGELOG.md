@@ -21,6 +21,7 @@
 - **磁盘 IO 监控**：Agent 采集 `disk.IOCounters()` 读写速率（差分计算）
 - **Favicon 自托管**：`frontend-dist/favicon.png`，不再依赖外部 URL
 - **编译规范**：强制清理 `frontend-dist/assets` + Vite 缓存 + Go 缓存后重建
+- **多语言支持**：新增中文/英文切换选项
 
 ### 修复
 - 版本更新，无修复项目

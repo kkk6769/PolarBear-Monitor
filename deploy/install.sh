@@ -64,9 +64,10 @@ main_menu() {
     echo "  6. 卸载 Dashboard (含全部数据)"
     echo "  7. 卸载 Agent"
     echo "  8. 更新 Dashboard (保留数据)"
+    echo "  9. 更新 Agent (保留配置)"
     echo "  0. 退出"
     echo
-    read -p "  请选择 [0-8]: " choice
+    read -p "  请选择 [0-9]: " choice
     case $choice in
         1) install_dashboard ;;
         2) install_agent ;;
@@ -76,6 +77,7 @@ main_menu() {
         6) uninstall_dashboard ;;
         7) uninstall_agent ;;
         8) update_dashboard ;;
+        9) update_agent ;;
         0) echo "退出"; exit 0 ;;
         *) main_menu ;;
     esac
@@ -304,6 +306,75 @@ update_dashboard() {
         chmod +x "$BIN"
         systemctl start polarbear-dashboard 2>/dev/null
         echo -e "${YELLOW}已恢复旧版本，查看日志: journalctl -u polarbear-dashboard -n 20${NC}"
+    fi
+    pause
+}
+
+# ==================== UPDATE AGENT ====================
+update_agent() {
+    require_root
+    echo -e "\n${BOLD}── 更新 Agent${NC}"
+
+    BIN="$AGENT_DIR/polarbear-agent"
+    CFG="$AGENT_DIR/agent.yaml"
+
+    if [ ! -f "$BIN" ]; then
+        echo -e "${RED}Agent 未安装，请先执行安装${NC}"
+        pause; return
+    fi
+
+    echo "正在停止 Agent..."
+    systemctl stop polarbear-agent 2>/dev/null || true
+
+    # backup old binary
+    cp "$BIN" "$BIN.bak" 2>/dev/null
+    echo "已备份旧文件 → $BIN.bak"
+
+    # detect arch & download
+    ARCH=$(uname -m)
+    case "$ARCH" in
+        aarch64|arm64) AGENT_URL="$DOWNLOAD_AGENT_ARM" ;;
+        *)             AGENT_URL="$DOWNLOAD_AGENT" ;;
+    esac
+    echo "架构: $ARCH, 从 $AGENT_URL 下载最新版本..."
+    if ! download "$AGENT_URL" "$BIN"; then
+        echo -e "${RED}下载失败，正在恢复备份...${NC}"
+        mv "$BIN.bak" "$BIN" 2>/dev/null
+        systemctl start polarbear-agent 2>/dev/null
+        pause; return
+    fi
+    chmod +x "$BIN"
+
+    # verify binary is valid (agent doesn't have -v, just check file size > 0)
+    if [ ! -s "$BIN" ]; then
+        echo -e "${RED}新二进制校验失败（文件为空），正在恢复备份...${NC}"
+        mv "$BIN.bak" "$BIN" 2>/dev/null
+        chmod +x "$BIN"
+        systemctl start polarbear-agent 2>/dev/null
+        pause; return
+    fi
+
+    # restart
+    systemctl start polarbear-agent 2>/dev/null
+    sleep 1
+
+    if systemctl is-active --quiet polarbear-agent; then
+        rm -f "$BIN.bak"
+        local server_addr
+        server_addr=$(grep -oP 'server:\s*\K.*' "$CFG" 2>/dev/null || echo "未知")
+        echo -e "${GREEN}${BOLD}╔══════════════════════════════════════════╗${NC}"
+        echo -e "${GREEN}${BOLD}║     ✅ Agent 更新完成！                    ║${NC}"
+        echo -e "${GREEN}${BOLD}╠══════════════════════════════════════════╣${NC}"
+        echo -e "${GREEN}║  上报地址: $server_addr${NC}"
+        echo -e "${GREEN}║  配置文件: $CFG (已保留)${NC}"
+        echo -e "${GREEN}║  查看日志: journalctl -u polarbear-agent -f${NC}"
+        echo -e "${GREEN}╚══════════════════════════════════════════╝${NC}"
+    else
+        echo -e "${RED}启动失败，正在恢复备份...${NC}"
+        mv "$BIN.bak" "$BIN" 2>/dev/null
+        chmod +x "$BIN"
+        systemctl start polarbear-agent 2>/dev/null
+        echo -e "${YELLOW}已恢复旧版本，查看日志: journalctl -u polarbear-agent -n 20${NC}"
     fi
     pause
 }
