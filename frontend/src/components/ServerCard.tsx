@@ -14,7 +14,7 @@ export default function ServerCard({ server }: Props) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`rounded-lg bg-card shadow-md ring-1 ring-border transition-all hover:shadow-sm hover:ring-muted-foreground/30 ${!online ? 'opacity-60' : ''}`}
+      className={`rounded-lg bg-card shadow-md ring-1 ring-border transition-all hover:shadow-lg hover:shadow-[#00D4FF]/10 hover:ring-[#00D4FF]/40 ${!online ? 'opacity-60' : ''}`}
     >
       <div className="flex items-center gap-3 p-3 md:px-5">
         <span className={`relative inline-flex h-2 w-2 shrink-0 rounded-full ${online ? 'bg-green-500' : 'bg-red-500'}`}>

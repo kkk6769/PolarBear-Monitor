@@ -32,7 +32,7 @@ function StatCard({ label, value, ringColor, dotColor, ping }: {
   label: string; value: number | string; ringColor: string; dotColor: string; ping?: boolean;
 }) {
   return (
-    <div className={`rounded-lg bg-card shadow-md ring-1 ring-border hover:${ringColor} transition-all cursor-default`}>
+    <div className="rounded-lg bg-card shadow-md ring-1 ring-border hover:ring-[#00D4FF]/50 hover:shadow-lg hover:shadow-[#00D4FF]/10 transition-all cursor-default">
       <div className="flex h-full items-center px-6 py-3 gap-3">
         <span className={`relative inline-flex h-2 w-2 shrink-0 rounded-full ${dotColor}`}>
           {ping && <span className={`absolute inline-flex h-2 w-2 animate-ping rounded-full ${dotColor} opacity-75`} />}
