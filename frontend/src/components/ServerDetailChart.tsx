@@ -58,15 +58,15 @@ function ChartCard({ title, data, dataKey, color, domain }: {
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
       <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e2d4a" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#4a4a55" />
           <XAxis dataKey="idx" hide />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain || ['auto', 'auto']} />
           <Tooltip
-            cursor={{ stroke: '#334155', strokeDasharray: '3 3' }}
-            contentStyle={{ background: '#111827', border: '1px solid #1e2d4a', borderRadius: 8, fontSize: 12 }}
+            cursor={{ stroke: '#00D4FF', strokeDasharray: '3 3' }}
+            contentStyle={{ background: '#363641', border: '1px solid #4a4a55', borderRadius: 8, fontSize: 12 }}
             labelFormatter={(_: any, p: any) => p?.[0]?.payload?.time || ''}
           />
-          <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
+          <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.15} strokeWidth={2} dot={false} isAnimationActive={false} />
         </AreaChart>
       </ResponsiveContainer>
     </div>
@@ -81,16 +81,16 @@ function MultiChart({ title, keys, colors, domain, data }: {
       <div className="text-[11px] text-muted-foreground mb-2">{title}</div>
       <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e2d4a" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#4a4a55" />
           <XAxis dataKey="idx" hide />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain} />
           <Tooltip
-            cursor={{ stroke: '#334155', strokeDasharray: '3 3' }}
-            contentStyle={{ background: '#111827', border: '1px solid #1e2d4a', borderRadius: 8, fontSize: 12 }}
+            cursor={{ stroke: '#00D4FF', strokeDasharray: '3 3' }}
+            contentStyle={{ background: '#363641', border: '1px solid #4a4a55', borderRadius: 8, fontSize: 12 }}
             labelFormatter={(_: any, p: any) => p?.[0]?.payload?.time || ''}
           />
           {keys.map((k, i) => (
-            <Area key={k} type="monotone" dataKey={k} stroke={colors[i]} fill={colors[i]} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
+            <Area key={k} type="monotone" dataKey={k} stroke={colors[i]} fill={colors[i]} fillOpacity={0.15} strokeWidth={2} dot={false} isAnimationActive={false} />
           ))}
         </AreaChart>
       </ResponsiveContainer>

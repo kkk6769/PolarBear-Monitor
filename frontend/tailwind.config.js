@@ -4,14 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#0a0f1e',
-        foreground: '#e4ecf7',
-        card: '#111827',
-        'card-foreground': '#e4ecf7',
-        muted: '#1e293b',
-        'muted-foreground': '#94a3b8',
-        border: '#1e2d4a',
-        ring: '#334155',
+        background: '#2C2C34',
+        foreground: '#e8e8ed',
+        card: '#363641',
+        'card-foreground': '#e8e8ed',
+        muted: '#1e1e24',
+        'muted-foreground': '#8e8e99',
+        border: '#4a4a55',
+        ring: '#00D4FF',
       },
       borderRadius: {
         lg: '0.5rem',
