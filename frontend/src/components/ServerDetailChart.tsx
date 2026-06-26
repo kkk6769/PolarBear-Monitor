@@ -19,6 +19,7 @@ interface DataPoint {
 export default function ServerDetailChart({ server, history }: Props) {
   const chartData: DataPoint[] = useMemo(() => {
     return history
+      .slice(-60)
       .map(msg => {
         const s = msg.data?.find(d => d.id === server.id);
         if (!s) return null;
@@ -40,9 +41,9 @@ export default function ServerDetailChart({ server, history }: Props) {
 
   return (
     <div className="space-y-4">
-      <ChartCard title="CPU 使用率 (%)" data={chartData} dataKey="cpu" color="#22C55E" />
-      <ChartCard title="内存使用率 (%)" data={chartData} dataKey="mem" color="#EAB308" />
-      <ChartCard title="磁盘使用率 (%)" data={chartData} dataKey="disk" color="#3B82F6" />
+      <ChartCard title="CPU 使用率 (%)" data={chartData} dataKey="cpu" color="#22C55E" domain={[0, 100]} />
+      <ChartCard title="内存使用率 (%)" data={chartData} dataKey="mem" color="#EAB308" domain={[0, 100]} />
+      <ChartCard title="磁盘使用率 (%)" data={chartData} dataKey="disk" color="#3B82F6" domain={[0, 100]} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ChartCard title="网络上行 (KB/s)" data={chartData} dataKey="netOut" color="#A855F7" />
         <ChartCard title="网络下行 (KB/s)" data={chartData} dataKey="netIn" color="#60A5FA" />
@@ -51,7 +52,7 @@ export default function ServerDetailChart({ server, history }: Props) {
   );
 }
 
-function ChartCard({ title, data, dataKey, color }: { title: string; data: DataPoint[]; dataKey: keyof DataPoint; color: string }) {
+function ChartCard({ title, data, dataKey, color, domain }: { title: string; data: DataPoint[]; dataKey: keyof DataPoint; color: string; domain?: [number, number] }) {
   return (
     <div className="rounded-lg bg-card ring-1 ring-border p-4">
       <div className="text-xs text-muted-foreground mb-3">{title}</div>
@@ -59,12 +60,12 @@ function ChartCard({ title, data, dataKey, color }: { title: string; data: DataP
         <AreaChart data={data} syncId="detailCharts">
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
           <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#A8A29E' }} interval="preserveStartEnd" />
-          <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} />
+          <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={45} domain={domain || ['auto', 'auto']} />
           <Tooltip
             contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
             labelStyle={{ color: '#A8A29E' }}
           />
-          <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={false} />
+          <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
         </AreaChart>
       </ResponsiveContainer>
     </div>
