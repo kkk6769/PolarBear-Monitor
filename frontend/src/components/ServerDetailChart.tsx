@@ -1,26 +1,37 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import type { ServerDisplay, WSMessage } from '../types/polarbear';
 
 interface Props { server: ServerDisplay; history: WSMessage[]; }
-interface DataPoint { time: string; cpu: number; mem: number; swap: number; disk: number; netIn: number; netOut: number; }
+interface DataPoint { idx: number; cpu: number; mem: number; swap: number; disk: number; netIn: number; netOut: number; }
+
+function buildData(history: WSMessage[], serverId: number, host: ServerDisplay['host']): DataPoint[] {
+  return history.slice(-60).map((msg, idx) => {
+    const s = msg.data?.find(d => d.id === serverId);
+    if (!s || !s.state) return null;
+    return {
+      idx,
+      cpu: parseFloat(s.cpu_percent) || 0,
+      mem: s.mem_percent || 0,
+      swap: s.state.swap_used ? (s.state.swap_used / (host?.swap_total || 1)) * 100 : 0,
+      disk: s.disk_percent || 0,
+      netIn: s.state.net_in_speed / 1024,
+      netOut: s.state.net_out_speed / 1024,
+    };
+  }).filter(Boolean) as DataPoint[];
+}
 
 export default function ServerDetailChart({ server, history }: Props) {
-  const data: DataPoint[] = useMemo(() => {
-    return history.slice(-60).map((msg, idx) => {
-      const s = msg.data?.find(d => d.id === server.id);
-      if (!s || !s.state) return null;
-      return {
-        time: idx.toString(),
-        cpu: parseFloat(s.cpu_percent) || 0,
-        mem: s.mem_percent || 0,
-        swap: s.state.swap_used ? (s.state.swap_used / (server.host?.swap_total || 1)) * 100 : 0,
-        disk: s.disk_percent || 0,
-        netIn: s.state.net_in_speed / 1024,
-        netOut: s.state.net_out_speed / 1024,
-      };
-    }).filter(Boolean) as DataPoint[];
-  }, [history, server.id]);
+  const [data, setData] = useState<DataPoint[]>([]);
+  const tickRef = useRef(0);
+
+  useEffect(() => {
+    tickRef.current++;
+    // Only update chart data every 5 ticks to prevent tooltip reset
+    if (tickRef.current % 5 === 0) {
+      setData(buildData(history, server.id, server.host));
+    }
+  }, [history, server.id, server.host]);
 
   if (data.length < 2) return <div className="text-center text-muted-foreground text-sm py-12">收集数据中...</div>;
 
@@ -48,13 +59,9 @@ function ChartCard({ title, data, dataKey, color, domain }: {
       <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
-          <XAxis dataKey="time" hide />
+          <XAxis dataKey="idx" hide />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain || ['auto', 'auto']} />
-          <Tooltip
-            cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }}
-            contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
-
-          />
+          <Tooltip cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }} contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }} />
           <Area type="monotone" dataKey={dataKey} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
         </AreaChart>
       </ResponsiveContainer>
@@ -71,13 +78,9 @@ function MultiChart({ title, keys, colors, domain, data }: {
       <ResponsiveContainer width="100%" height={120}>
         <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
-          <XAxis dataKey="time" hide />
+          <XAxis dataKey="idx" hide />
           <YAxis tick={{ fontSize: 10, fill: '#A8A29E' }} width={40} domain={domain} />
-          <Tooltip
-            cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }}
-            contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }}
-
-          />
+          <Tooltip cursor={{ stroke: '#A8A29E', strokeDasharray: '3 3' }} contentStyle={{ background: '#0A0A09', border: '1px solid #292524', borderRadius: 8, fontSize: 12 }} />
           {keys.map((k, i) => (
             <Area key={k} type="monotone" dataKey={k} stroke={colors[i]} fill={colors[i]} fillOpacity={0.1} strokeWidth={2} dot={false} isAnimationActive={false} />
           ))}
