@@ -6,12 +6,14 @@
 
 ## 特性
 
-- 🎨 **Nezha 风格 UI** — React + Tailwind 暖石深色主题，Framer Motion 动画
-- 📊 **实时折线图** — Recharts，CPU / 内存+Swap / 磁盘 / 网络上下行
-- 🖥️ **服务器详情页** — 点击卡片进入，含完整硬件信息 + 累计流量
-- 🌍 **IP 归属地** — 国旗图标 + 国家名称，7 天缓存
-- 🔐 **管理后台** — bcrypt 认证，排序/改名/备注/删除
-- 📦 **单文件部署** — Go `embed.FS` 打包前后端，一个二进制跑全部
+- **纯单向通信** — Agent 仅上报，Dashboard 不下发任何命令，安全无入侵
+- **实时流式传输** — Agent 通过 gRPC Client Streaming 每秒推送指标，Dashboard WebSocket 广播全量数据
+- **多平台探针** — Linux amd64/arm64 + Windows amd64，静态编译零依赖
+- **完整指标采集** — CPU 占用率、内存/Swap、磁盘用量/IO、网络速率/累计流量、系统负载（1/5/15m）、运行时长
+- **自动重连** — Agent 断线后 10s 自动重连，Dashboard 无感恢复
+- **IP 归属地** — ip-api.com 查询 IP 国家，flagcdn.com 国旗图标，7 天缓存，私有 IP 自动跳过
+- **管理后台** — bcrypt 密码认证 + HMAC-SHA256 Cookie，排序/改名/备注/删除服务器
+- **单二进制部署** — Go `embed.FS` 打包前端，一个文件即整个系统
 
 ## 技术栈
 
